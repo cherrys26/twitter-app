@@ -36,3 +36,9 @@
     transform: rotate(360deg);
   }
 }
+
+.tweet-button {
+  margin-left: -90px !important;
+  margin-bottom: 10px !important;
+  border-radius: 50px !important;
+}
