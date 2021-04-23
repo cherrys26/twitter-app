@@ -7,18 +7,19 @@ import {
     useLocation
 } from "react-router-dom";
 import Login from "./Login/Login";
-import Home from "./sidebar-components/Home";
+import Home from "./sidebar-components/main/Home";
 import Explore from "./sidebar-components/Explore"
 import Messages from "./sidebar-components/Messages"
 import Notifications from "./sidebar-components/Notifications"
 import Profile from "./sidebar-components/Profile"
 import { Avatar } from 'primereact/avatar';
 import { Dialog } from 'primereact/dialog';
+import Feed from "./sidebar-components/main/Feed";
 
 const routes = [
     {
         path: "/home",
-        main: () => <Home />
+        main: () => <Feed />
     },
     {
         path: "/",
@@ -62,8 +63,9 @@ export default function Sidebar() {
 
     return (
         <Router>
-            <div style={{ display: "flex" }}>
+            <div className="p-grid" style={{ display: "flex" }}>
                 <div
+                    className="p-col-fixed"
                     style={{
                         padding: "10px",
                         width: "20%",
@@ -71,23 +73,23 @@ export default function Sidebar() {
                 >
                     <ul style={{ listStyleType: "none", padding: 0 }}>
                         <li>
-                            <Link to="/home"><i className="pi pi-home" style={{ textDecoration: 'none' }} /> Home</Link>
+                            <Link to="/home" style={{ textDecoration: 'none' }}><i className="pi pi-home" /> Home</Link>
                         </li>
                         <br />
                         <li>
-                            <Link to="/explore"><i className="pi pi-search" style={{ textDecoration: 'none' }} /> Explore</Link>
+                            <Link to="/explore" style={{ textDecoration: 'none' }} ><i className="pi pi-search" /> Explore</Link>
                         </li>
                         <br />
                         <li>
-                            <Link to="/notifications"><i className="pi pi-bell" style={{ textDecoration: 'none' }} /> Notifications</Link>
+                            <Link to="/notifications" style={{ textDecoration: 'none' }}><i className="pi pi-bell" /> Notifications</Link>
                         </li>
                         <br />
                         <li>
-                            <Link to="/messages"><i className="pi pi-send" style={{ textDecoration: 'none' }} /> Messages</Link>
+                            <Link to="/messages" style={{ textDecoration: 'none' }}><i className="pi pi-send" /> Messages</Link>
                         </li>
                         <br />
                         <li>
-                            <Link to="/profile"><i className="pi pi-user" style={{ textDecoration: 'none' }} /> Profile</Link>
+                            <Link to="/profile" style={{ textDecoration: 'none' }}><i className="pi pi-user" /> Profile</Link>
                         </li>
                         <br />
                         <li>
@@ -101,7 +103,7 @@ export default function Sidebar() {
                     </ul>
                 </div>
 
-                <div style={{ flex: 1, padding: "10px" }}>
+                <div className="p-col" style={{ flex: 1, padding: "10px" }}>
                     <Switch>
                         {routes.map((route, index) => (
                             <Route
@@ -115,7 +117,7 @@ export default function Sidebar() {
                 </div>
                 <ToLogin><i className="pi pi-send" /></ToLogin>
             </div>
-        </Router>
+        </Router >
     );
 }
 function ToLogin() {

@@ -31,7 +31,6 @@ function PageSwitch() {
       <Switch location={background || location}>
         <Route exact path="/" children={<Login />} />
         <Route path="/signup" children={<Signup />} />
-        <Route path="/home" children={<Sidebar />} />
         <Route path="/" children={<Sidebar />} />
       </Switch>
 
