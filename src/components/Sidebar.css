@@ -1,0 +1,6 @@
+.items {
+    list-style-type: none;
+    padding: 0;
+    position: fixed;
+    padding-left: 5%;
+}

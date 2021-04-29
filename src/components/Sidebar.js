@@ -4,17 +4,17 @@ import {
     Switch,
     Route,
     Link,
-    useLocation
 } from "react-router-dom";
-import Login from "./Login/Login";
+import { Avatar } from 'primereact/avatar';
+import { Dialog } from 'primereact/dialog';
+
 import Home from "./sidebar-components/main/Home";
 import Explore from "./sidebar-components/Explore"
 import Messages from "./sidebar-components/Messages"
 import Notifications from "./sidebar-components/Notifications"
 import Profile from "./sidebar-components/Profile"
-import { Avatar } from 'primereact/avatar';
-import { Dialog } from 'primereact/dialog';
 import Feed from "./sidebar-components/main/Feed";
+import "./Sidebar.css"
 
 const routes = [
     {
@@ -41,7 +41,12 @@ const routes = [
     {
         path: "/profile",
         main: () => <Profile />
+    },
+    {
+        path: "/:username",
+        main: () => <Profile />
     }
+
 ];
 
 export default function Sidebar() {
@@ -71,7 +76,7 @@ export default function Sidebar() {
                         width: "20%",
                     }}
                 >
-                    <ul style={{ listStyleType: "none", padding: 0 }}>
+                    <ul className="items">
                         <li>
                             <Link to="/home" style={{ textDecoration: 'none' }}><i className="pi pi-home" /> Home</Link>
                         </li>
@@ -115,20 +120,7 @@ export default function Sidebar() {
                         ))}
                     </Switch>
                 </div>
-                <ToLogin><i className="pi pi-send" /></ToLogin>
             </div>
         </Router >
     );
-}
-function ToLogin() {
-    let location = useLocation();
-    let background = location.state && location.state.background;
-
-    return (
-        <div>
-            <Switch location={background || location}>
-                <Route path="/login" children={<Login />} />
-            </Switch>
-        </div >
-    )
 }
