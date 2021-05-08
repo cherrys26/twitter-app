@@ -2,5 +2,12 @@
     list-style-type: none;
     padding: 0;
     position: fixed;
-    padding-left: 5%;
+    padding-left: 4%;
+    height: -webkit-fill-available;
+    margin-top: 4rem;
+    font-size: larger;
+}
+
+ul li:last-child {
+    height: -webkit-fill-available;
 }

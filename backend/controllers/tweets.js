@@ -1,0 +1,42 @@
+const Tweets = require('../models/Tweets');
+
+exports.postTweet = (req, res, next) => {
+    let { tweet, username } = req.body;
+    let errors = [];
+    if (!tweet) {
+        errors.push({ tweet: "required" });
+    }
+    Tweets.find({ username: username })
+        .then(user => {
+            if (!user) {
+                return res.status(422).json({ errors: [{ user: "username doesnt exists" }] });
+            } else {
+                const user = new Tweets({
+                    username: username,
+                    tweet: tweet
+                });
+                user.save()
+                    .then(response => {
+                        res.status(200).json({
+                            success: true,
+                            result: response
+                        })
+                    })
+                    .catch(err => {
+                        res.status(500).json({
+                            errors: [{ error: err }]
+                        });
+                    });
+            }
+        }).catch(err => {
+            res.status(500).json({
+                errors: [{ error: 'Something went wrong' }]
+            });
+        })
+}
+exports.getTweet = (req, res) => {
+    let username = req.params.username
+    Tweets.find({ username: username })
+        .then(user => res.json(user))
+        .catch(err => res.status(400).json('Error: ' + err))
+}

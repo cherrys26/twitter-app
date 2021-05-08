@@ -1,43 +1,98 @@
-import React, { Component } from 'react';
-import { Button } from 'primereact/button';
-import { Card } from 'primereact/card';
-import { InputText } from 'primereact/inputtext';
-import { Password } from 'primereact/password';
-import { Link } from 'react-router-dom';
-import 'primereact/resources/primereact.css';
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { Form, Button } from 'react-bootstrap';
+import axios from 'axios';
+import { BASE_API_URL } from '../../utils/constants';
+import { Link, Route } from 'react-router-dom'
+import { motion } from 'framer-motion';
+import Jumbotron from 'react-bootstrap/Jumbotron'
 
-export default class Login extends Component {
+function Login(props) {
+    const [toHomepage, setToHomepage] = useState();
+    const { register, handleSubmit, formState: { errors } } = useForm();
 
-    render() {
-        return (
-            <div>
-                <Card>
-                    <div className="p-float-label">
-                        <InputText id="username" />
-                        <label htmlFor="username">Username</label>
+    const onSubmit = async (data) => {
+        console.log(data);
+
+        try {
+            const response = await axios.post(`${BASE_API_URL}/api/signin`, data);
+            setToHomepage(props.history.push("/home") & localStorage.setItem("username", JSON.stringify(response.data.message.username))
+            )
+            console.log(response.data.message)
+        } catch (error) {
+            console.log(error);
+            if (error.response) {
+                console.log('error', error.response.data);
+            }
+        }
+    };
+
+    return (
+        <div>
+            <Jumbotron fluid>
+                <h1>Welcome to Switter!</h1>
+            </Jumbotron>
+            <motion.div
+                initial={{ x: '-100vw' }}
+                animate={{ x: 0 }}>
+                <Form className="input-form" onSubmit={handleSubmit(onSubmit)}>
+                    <div className="col-md-6 offset-md-3">
+
+                        <Form.Group controlId="name">
+                            <Form.Label>Username</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="username"
+                                placeholder="Enter your username"
+                                {...register("username", {
+                                    required: 'Username is required.',
+                                    pattern: {
+                                        value: /^[a-zA-Z0-9.-_]+$/,
+                                        message: 'Username is not valid.'
+                                    }
+                                })}
+                                className={`${errors.username ? 'input-error' : ''}`}
+                            />
+                            {errors.username && (
+                                <p className="errorMsg">{errors.username.message}</p>
+                            )}
+                        </Form.Group>
+
+                        <Form.Group controlId="password">
+                            <Form.Label>Password</Form.Label>
+                            <Form.Control
+                                type="password"
+                                name="password"
+                                placeholder="Enter your password"
+                                {...register("password", {
+                                    required: 'Password is required.',
+                                    minLength: {
+                                        value: 6,
+                                        message: 'Password should have at-least 6 characters.'
+                                    }
+                                })}
+                                className={`${errors.password ? 'input-error' : ''}`}
+                            />
+                            {errors.password && (
+                                <p className="errorMsg">{errors.password.message}</p>
+                            )}
+                        </Form.Group>
+
+                        <Button variant="primary" type="submit" {...toHomepage}>
+                            Check Login
+                            </Button>
+
                     </div>
-                    <br />
-                    <div className="p-float-label">
-                        <Password toggleMask id="password" feedback={false} />
-                        <label htmlFor="password">Password</label>
-
-                    </div>
-                </Card>
-                <br />
+                </Form>
                 <div>
-                    <Link to="/home">
-                        <Button label="Log in" />
-                    </Link>
-                    <br />
-                    <div>
-                        <span>Don't have an Account:<br /></span>
-                        <Link to="/signup">
-                            <span>Sign up Now</span>
-                        </Link>
 
-                    </div>
+                    <Route>
+                        <p>Dont have an account? <Link to="/signup1">Signup</Link></p>
+                    </Route>
                 </div>
-            </div>
-        )
-    }
-}
+            </motion.div>
+        </div>
+    );
+};
+
+export default Login;

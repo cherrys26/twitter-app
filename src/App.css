@@ -38,7 +38,16 @@
 }
 
 .tweet-button {
-  margin-left: -90px !important;
+  margin-right: 10px !important;
   margin-bottom: 10px !important;
   border-radius: 50px !important;
+  border-color: purple;
+  background-color: purple;
+}
+
+.login-page {
+  text-align: -webkit-center;
+}
+.p-float-label {
+  display: table !important;
 }

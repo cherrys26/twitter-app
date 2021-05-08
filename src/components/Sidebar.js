@@ -5,24 +5,29 @@ import {
     Route,
     Link,
 } from "react-router-dom";
-import { Avatar } from 'primereact/avatar';
-import { Dialog } from 'primereact/dialog';
-
-import Home from "./sidebar-components/main/Home";
+import Modal from 'react-bootstrap/Modal'
+import Button from 'react-bootstrap/Button';
+import Image from 'react-bootstrap/Image';
 import Explore from "./sidebar-components/Explore"
 import Messages from "./sidebar-components/Messages"
 import Notifications from "./sidebar-components/Notifications"
 import Profile from "./sidebar-components/Profile"
-import Feed from "./sidebar-components/main/Feed";
+import Home from "./sidebar-components/Home";
+
 import "./Sidebar.css"
+
+
+function getUser() {
+    return JSON.parse(localStorage.getItem('username'))
+}
 
 const routes = [
     {
         path: "/home",
-        main: () => <Feed />
+        main: () => <Home />
     },
     {
-        path: "/",
+        path: "/home",
         exact: true,
         main: () => <Home />
     },
@@ -39,32 +44,33 @@ const routes = [
         main: () => <Messages />
     },
     {
-        path: "/profile",
-        main: () => <Profile />
-    },
-    {
         path: "/:username",
         main: () => <Profile />
     }
 
 ];
 
-export default function Sidebar() {
+function MyVerticallyCenteredModal(props) {
+    return (
+        <Modal
+            {...props}
+            size="s"
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+        >
+            <Modal.Body >
+                <h4>Do you want to log out?</h4>
+            </Modal.Body>
+            <Modal.Footer>
+                <Button onClick={props.onLogout}>Logout</Button>
+                <Button onClick={props.onHide}>Close</Button>
+            </Modal.Footer>
+        </Modal>
+    );
+}
 
-    const [displayLogin, setDisplayLogin] = useState(false);
-
-    const login = {
-        'displayLogin': setDisplayLogin
-    }
-
-    const onClick = (name) => {
-        login[`${name}`](true);
-    }
-
-    const onHide = (name) => {
-        login[`${name}`](false);
-    }
-
+export default function Sidebar(props) {
+    const [modalShow, setModalShow] = useState(false);
 
     return (
         <Router>
@@ -94,16 +100,18 @@ export default function Sidebar() {
                         </li>
                         <br />
                         <li>
-                            <Link to="/profile" style={{ textDecoration: 'none' }}><i className="pi pi-user" /> Profile</Link>
+                            <Link to={getUser()} style={{ textDecoration: 'none' }}><i className="pi pi-user" /> Profile</Link>
                         </li>
                         <br />
                         <li>
-                            <Avatar label="P" shape="circle" onClick={() => onClick('displayLogin')} />
-                            <Dialog visible={displayLogin} onHide={() => onHide('displayLogin')}>
-                                <div>
-                                    Hello world testing
-                                </div>
-                            </Dialog>
+                            <Image src="https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png" style={{ width: "50px", height: "50px" }} onClick={() => setModalShow(true)} roundedCircle>
+                            </Image>
+
+                            <MyVerticallyCenteredModal
+                                show={modalShow}
+                                onHide={() => setModalShow(false)}
+                                onLogout={() => setModalShow(props.history.push('/') & localStorage.removeItem("username"))}
+                            />
                         </li>
                     </ul>
                 </div>
