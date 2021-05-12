@@ -4,7 +4,6 @@ import { BASE_API_URL } from "../../utils/constants"
 import Header from './Toolbar';
 import Card from 'react-bootstrap/Card'
 import '../../App.css'
-import Swal from 'sweetalert2';
 import Button from 'react-bootstrap/button'
 import Image from 'react-bootstrap/Image'
 import Form from 'react-bootstrap/Form';
@@ -30,15 +29,7 @@ export default function Home(props) {
             await axios.post(`${BASE_API_URL}/api/tweet/${getUser}`, {
                 ...postTweet,
                 ...updatedData
-            });
-            Swal.fire('Awesome!', "You're successfully registered!", 'success').then(
-                (result) => {
-                    if (result.isConfirmed || result.isDismissed) {
-                        props.TweetPost()
-                        props.history.push('/home');
-                    }
-                }
-            );
+            })
         } catch (error) {
             if (error.response) {
 
@@ -51,6 +42,9 @@ export default function Home(props) {
         userTweets.then(tweetData => setTweets(tweetData.data)) // eslint-disable-next-line
     }, [])
 
+    function refreshPage() {
+        window.location.reload(false);
+    }
 
     return (
         <Container >
@@ -77,7 +71,7 @@ export default function Home(props) {
                                                 onChange={(event) => setTweet(event.target.value)}
                                                 style={{ width: "inherit", height: "80px", border: "0px" }} />
                                         </Form.Group>
-                                        <Button className="tweet-button" type="submit">Tweet </Button>
+                                        <Button className="tweet-button" onClick={refreshPage} type="submit">Tweet </Button>
                                     </Form>
                                 </Card.Body>
                             </Col>

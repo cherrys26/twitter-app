@@ -81,7 +81,9 @@ function PageSwitch() {
             <Route path="/explore" component={Sidebar} />
             <Route path="/notifications" component={Sidebar} />
             <Route path="/messages" component={Sidebar} />
-            <Route path="/:username" component={Sidebar} />
+            <Route exact path="/:username" component={Sidebar} />
+            <Route path="/:username/followers" component={Sidebar} />
+            <Route path="/:username/following" component={Sidebar} />
           </Switch>
         </>
       </Switch>

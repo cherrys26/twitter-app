@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
     useLocation,
+    Link,
 } from 'react-router-dom'
 import { BASE_API_URL } from '../../utils/constants';
 
@@ -21,16 +22,16 @@ import { AiTwotoneStar } from "react-icons/ai";
 export default function Profile() {
 
     const [user, setUser] = useState();
+    const [username, setUsername] = useState();
     const [tweets, setTweets] = useState([]);
-    const [tweetsTot, setTweetsTot] = useState();
     const location = useLocation();
-    let tag = location.pathname.slice(1)
+    let path = location.pathname.split("/")
 
-
-    const userProfile = axios.get(`${BASE_API_URL}/api/user/${tag}`);
-    const userTweets = axios.get(`${BASE_API_URL}/api/tweet/${tag}`);
-    const userTweetsTot = axios.get(`${BASE_API_URL}/api/tweet/${tag}`);
-
+    const userProfile = axios.get(`${BASE_API_URL}/api/user/${path[1]}`);
+    const getUsername = axios.get(`${BASE_API_URL}/api/user/${path[1]}`);
+    const userTweets = axios.get(`${BASE_API_URL}/api/tweet/${path[1]}`);
+    console.log(user)
+    console.log(username)
     useEffect(() => {
         userProfile.then(data => setUser(data.data)) // eslint-disable-next-line
     }, [])
@@ -38,7 +39,7 @@ export default function Profile() {
         userTweets.then(tweetData => setTweets(tweetData.data)) // eslint-disable-next-line
     }, [])
     useEffect(() => {
-        userTweetsTot.then(tweetData => setTweetsTot(tweetData.data.length)) // eslint-disable-next-line
+        getUsername.then(userUsername => setUsername(userUsername.data[0].username)) // eslint-disable-next-line
     }, [])
 
     const date = moment(`2021-05-07T14:52:28.923Z`).format('LL');;
@@ -60,7 +61,7 @@ export default function Profile() {
                                 {user && user.map(user => {
                                     return (
                                         <div>
-                                            { tweetsTot > 10 ?
+                                            { user.followers.length > 10 ?
                                                 (<div>{user.username}
                                                     <OverlayTrigger
                                                         placement="right"
@@ -73,7 +74,7 @@ export default function Profile() {
                                             }
                                         </div>)
                                 })}
-                                Tweets: {tweetsTot}
+                                Tweets: {tweets.length}
                             </Navbar.Brand>
                             <Form inline>
                                 <FormControl type="text" placeholder="Search" className="mr-sm-2" />
@@ -113,12 +114,17 @@ export default function Profile() {
                                         <Card.Footer>
                                             <Row>
                                                 <Col md={3}>
-                                                    Followers
-                                                 </Col>
+                                                    <Link to={`${user.username}/followers`} style={{ textDecoration: 'none' }}>
+                                                        {user.followers.length} Followers
+                                                        </Link>
+                                                </Col>
                                                 <Col md={3}>
-                                                    Following
-                                                 </Col>
+                                                    <Link to={`${user.username}/following`} style={{ textDecoration: 'none' }}>
+                                                        {user.following.length} Following
+                                                    </Link>
+                                                </Col>
                                             </Row>
+
                                         </Card.Footer>
                                     </Card.Body>
                                 </Card>

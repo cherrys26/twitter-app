@@ -19,7 +19,8 @@ app.get('/', (req, res) => {
 mongoose.connect(process.env.DATABASE, {
     useNewUrlParser: true,
     useCreateIndex: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useFindAndModify: false
 }).then(() => console.log('DB connected'))
 
 const port = process.env.PORT || 8080;

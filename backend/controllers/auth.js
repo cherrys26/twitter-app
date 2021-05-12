@@ -5,7 +5,7 @@ const {
     createJWT,
 } = require("../utils/auth");
 exports.signup = (req, res, next) => {
-    let { name, username, email, password, bio } = req.body;
+    let { name, username, email, password, bio, followers, following } = req.body;
     let errors = [];
     if (!name) {
         errors.push({ name: "required" });
@@ -35,7 +35,9 @@ exports.signup = (req, res, next) => {
                     username: username,
                     email: email,
                     password: password,
-                    bio: bio
+                    bio: bio,
+                    followers: followers,
+                    following, following
                 });
                 bcrypt.genSalt(10, function (err, salt) {
                     bcrypt.hash(password, salt, function (err, hash) {
@@ -116,12 +118,44 @@ exports.signin = (req, res) => {
         res.status(500).json({ erros: err });
     });
 }
-exports.users = (req, res) => {
+exports.allUsers = (req, res) => {
     User.find().then(users => res.json(users)).catch(err => res.status(400).json('Error: ' + err))
 }
-exports.user = (req, res) => {
+exports.getUser = (req, res) => {
     let username = req.params.username
     User.find({ username: username })
         .then(user => res.json(user))
+        .catch(err => res.status(400).json('Error: ' + err))
+}
+exports.updateFollowers = (req, res) => {
+    let username = req.params.username
+    let { followers } = req.body
+    User.updateOne(
+        { username: username },
+        { $push: { followers: followers } }
+    )
+        .then(follower => res.json(follower))
+        .catch(error => res.json(error))
+}
+exports.getFollowers = (req, res) => {
+    let username = req.params.username
+    User.find({ username: username })
+        .then(user => res.json(user[0].followers))
+        .catch(err => res.status(400).json('Error: ' + err))
+}
+exports.updateFollowing = (req, res) => {
+    let username = req.params.username
+    let { following } = req.body
+    User.updateOne(
+        { username: username },
+        { $push: { following: following } }
+    )
+        .then(follower => res.json(follower))
+        .catch(error => res.json(error))
+}
+exports.getFollowing = (req, res) => {
+    let username = req.params.username
+    User.find({ username: username })
+        .then(user => res.json(user[0].following))
         .catch(err => res.status(400).json('Error: ' + err))
 }

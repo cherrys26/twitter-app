@@ -13,6 +13,8 @@ import Messages from "./sidebar-components/Messages"
 import Notifications from "./sidebar-components/Notifications"
 import Profile from "./sidebar-components/Profile"
 import Home from "./sidebar-components/Home";
+import Followers from "./sidebar-components/Followers"
+import Following from "./sidebar-components/Following"
 
 import "./Sidebar.css"
 
@@ -44,9 +46,25 @@ const routes = [
         main: () => <Messages />
     },
     {
-        path: "/:username",
+        path: `/${getUser()}`,
+        exact: true,
         main: () => <Profile />
-    }
+    },
+    {
+        path: "/:username",
+        exact: true,
+        main: () => <Profile />
+    },
+    {
+        path: "/:username/followers",
+        exact: true,
+        main: () => <Followers />
+    },
+    {
+        path: "/:username/following",
+        exact: true,
+        main: () => <Following />
+    },
 
 ];
 
@@ -100,7 +118,7 @@ export default function Sidebar(props) {
                         </li>
                         <br />
                         <li>
-                            <Link to={getUser()} style={{ textDecoration: 'none' }}><i className="pi pi-user" /> Profile</Link>
+                            <Link to={`/${getUser()}`} style={{ textDecoration: 'none' }}><i className="pi pi-user" /> Profile</Link>
                         </li>
                         <br />
                         <li>

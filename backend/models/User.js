@@ -18,7 +18,8 @@ let userSchema = new Schema({
             if (!value.match(/^[^@ ]+@[^@ ]+\.[^@ .]{2,}$/)) {
                 throw new Error('Email is not valid.');
             }
-        }
+        },
+        unique: true
     },
     password: {
         type: String,
@@ -28,6 +29,12 @@ let userSchema = new Schema({
     bio: {
         type: String,
         required: true,
+    },
+    followers: {
+        type: [String]
+    },
+    following: {
+        type: [String]
     }
 }, {
     timestamps: true,
