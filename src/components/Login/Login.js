@@ -12,13 +12,11 @@ function Login(props) {
     const { register, handleSubmit, formState: { errors } } = useForm();
 
     const onSubmit = async (data) => {
-        console.log(data);
 
         try {
             const response = await axios.post(`${BASE_API_URL}/api/signin`, data);
             setToHomepage(props.history.push("/home") & localStorage.setItem("username", JSON.stringify(response.data.message.username))
             )
-            console.log(response.data.message)
         } catch (error) {
             console.log(error);
             if (error.response) {
@@ -32,9 +30,7 @@ function Login(props) {
             <Jumbotron fluid>
                 <h1>Welcome to Switter!</h1>
             </Jumbotron>
-            <motion.div
-                initial={{ x: '-100vw' }}
-                animate={{ x: 0 }}>
+            <div>
                 <Form className="input-form" onSubmit={handleSubmit(onSubmit)}>
                     <div className="col-md-6 offset-md-3">
 
@@ -77,20 +73,21 @@ function Login(props) {
                                 <p className="errorMsg">{errors.password.message}</p>
                             )}
                         </Form.Group>
-
-                        <Button variant="primary" type="submit" {...toHomepage}>
-                            Check Login
+                        <br />
+                        <motion.div whileHover={{ scale: 1.05 }} >
+                            <Button variant="primary" type="submit" {...toHomepage}>
+                                Check Login
                             </Button>
-
+                        </motion.div>
                     </div>
                 </Form>
                 <div>
 
                     <Route>
-                        <p>Dont have an account? <Link to="/signup1">Signup</Link></p>
+                        <p>Dont have an account? <Link to="/signup">Signup</Link></p>
                     </Route>
                 </div>
-            </motion.div>
+            </div>
         </div>
     );
 };

@@ -51,3 +51,20 @@
 .p-float-label {
   display: table !important;
 }
+
+.nav-tabs .nav-link {
+  width: 50%;
+}
+
+.homeButton {
+  background: transparent;
+  box-shadow: 0px 0px 0px transparent;
+  border: 0px solid transparent;
+  text-shadow: 0px 0px 0px transparent;
+}
+#likeButton {
+  color: rgba(255, 0, 0, 0.767);
+}
+#replyButton {
+  color: rgba(0, 0, 0, 0.767);
+}

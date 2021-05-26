@@ -1,21 +1,15 @@
 import React, { useState } from 'react';
 import './App.css';
 import Login from './components/Login/Login';
-import 'primereact/resources/themes/saga-purple/theme.css';
-import 'primeflex/primeflex.css';
-import 'primeicons/primeicons.css';
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   useLocation,
 } from "react-router-dom";
-import FirstStep from './components/Login/FirstStep';
-import Header from './components/Login/Header';
-import SecondStep from './components/Login/SecondStep';
-import ThirdStep from './components/Login/ThirdStep';
 import Sidebar from './components/Sidebar';
 import Home from './components//sidebar-components/Home'
+import Signup from './components/Login/Signup';
 function App() {
   return (
     <div className="App">
@@ -50,32 +44,18 @@ function PageSwitch() {
     <div>
       <Switch location={background || location}>
         <>
-          <Header />
           <Switch>
             <Route component={Login} exact path="/" />
             <Route
               render={(props) => (
-                <FirstStep {...props} user={user} updateUser={updateUser} />
-              )}
-              path="/signup1"
-              exact={true}
-            />
-            <Route
-              render={(props) => (
-                <SecondStep {...props} user={user} updateUser={updateUser} />
-              )}
-              path="/signup2"
-            />
-            <Route
-              render={(props) => (
-                <ThirdStep
+                <Signup
                   {...props}
                   user={user}
                   updateUser={updateUser}
                   resetUser={resetUser}
                 />
               )}
-              path="/signup3"
+              path="/signup"
             />
             <Route render={(props) => (<Home {...props} postTweet={postTweet} TweetPost={TweetPost} />)} path="/home" component={Sidebar} />
             <Route path="/explore" component={Sidebar} />

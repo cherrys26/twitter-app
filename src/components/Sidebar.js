@@ -5,6 +5,8 @@ import {
     Route,
     Link,
 } from "react-router-dom";
+import Container from 'react-bootstrap/Container';
+import Col from 'react-bootstrap/Col'
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button';
 import Image from 'react-bootstrap/Image';
@@ -15,7 +17,8 @@ import Profile from "./sidebar-components/Profile"
 import Home from "./sidebar-components/Home";
 import Followers from "./sidebar-components/Followers"
 import Following from "./sidebar-components/Following"
-
+import { AiOutlineHome, AiOutlineBell, AiOutlineUser } from "react-icons/ai";
+import { BiSearchAlt, BiSend } from "react-icons/bi";
 import "./Sidebar.css"
 
 
@@ -92,9 +95,9 @@ export default function Sidebar(props) {
 
     return (
         <Router>
-            <div className="p-grid" style={{ display: "flex" }}>
-                <div
-                    className="p-col-fixed"
+            <Container style={{ display: "flex", marginRight: 0, marginLeft: 0, maxWidth: "inherit" }}>
+                <Col sm={2}
+
                     style={{
                         padding: "10px",
                         width: "20%",
@@ -102,23 +105,23 @@ export default function Sidebar(props) {
                 >
                     <ul className="items">
                         <li>
-                            <Link to="/home" style={{ textDecoration: 'none' }}><i className="pi pi-home" /> Home</Link>
+                            <Link to="/home" style={{ textDecoration: 'none' }}><AiOutlineHome /> Home</Link>
                         </li>
                         <br />
                         <li>
-                            <Link to="/explore" style={{ textDecoration: 'none' }} ><i className="pi pi-search" /> Explore</Link>
+                            <Link to="/explore" style={{ textDecoration: 'none' }} ><BiSearchAlt /> Explore</Link>
                         </li>
                         <br />
                         <li>
-                            <Link to="/notifications" style={{ textDecoration: 'none' }}><i className="pi pi-bell" /> Notifications</Link>
+                            <Link to="/notifications" style={{ textDecoration: 'none' }}><AiOutlineBell /> Notifications</Link>
                         </li>
                         <br />
                         <li>
-                            <Link to="/messages" style={{ textDecoration: 'none' }}><i className="pi pi-send" /> Messages</Link>
+                            <Link to="/messages" style={{ textDecoration: 'none' }}><BiSend /> Messages</Link>
                         </li>
                         <br />
                         <li>
-                            <Link to={`/${getUser()}`} style={{ textDecoration: 'none' }}><i className="pi pi-user" /> Profile</Link>
+                            <Link to={`/${getUser()}`} style={{ textDecoration: 'none' }}><AiOutlineUser /> Profile</Link>
                         </li>
                         <br />
                         <li>
@@ -132,9 +135,9 @@ export default function Sidebar(props) {
                             />
                         </li>
                     </ul>
-                </div>
+                </Col>
 
-                <div className="p-col" style={{ flex: 1, padding: "10px" }}>
+                <Col sm={10} style={{ flex: 1, padding: "10px" }}>
                     <Switch>
                         {routes.map((route, index) => (
                             <Route
@@ -145,8 +148,8 @@ export default function Sidebar(props) {
                             />
                         ))}
                     </Switch>
-                </div>
-            </div>
+                </Col>
+            </Container>
         </Router >
     );
 }

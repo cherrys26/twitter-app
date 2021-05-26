@@ -127,6 +127,14 @@ exports.getUser = (req, res) => {
         .then(user => res.json(user))
         .catch(err => res.status(400).json('Error: ' + err))
 }
+
+//followers
+exports.getFollowers = (req, res) => {
+    let username = req.params.username
+    User.find({ username: username })
+        .then(user => res.json(user[0].followers))
+        .catch(err => res.status(400).json('Error: ' + err))
+}
 exports.updateFollowers = (req, res) => {
     let username = req.params.username
     let { followers } = req.body
@@ -137,10 +145,22 @@ exports.updateFollowers = (req, res) => {
         .then(follower => res.json(follower))
         .catch(error => res.json(error))
 }
-exports.getFollowers = (req, res) => {
+exports.deleteFollowers = (req, res) => {
+    let username = req.params.username
+    let { followers } = req.body
+    User.updateOne(
+        { username: username },
+        { $pull: { followers: followers } }
+    )
+        .then(follower => res.json(follower))
+        .catch(error => res.json(error))
+}
+
+//following
+exports.getFollowing = (req, res) => {
     let username = req.params.username
     User.find({ username: username })
-        .then(user => res.json(user[0].followers))
+        .then(user => res.json(user[0].following))
         .catch(err => res.status(400).json('Error: ' + err))
 }
 exports.updateFollowing = (req, res) => {
@@ -150,12 +170,16 @@ exports.updateFollowing = (req, res) => {
         { username: username },
         { $push: { following: following } }
     )
-        .then(follower => res.json(follower))
+        .then(following => res.json(following))
         .catch(error => res.json(error))
 }
-exports.getFollowing = (req, res) => {
+exports.deleteFollowing = (req, res) => {
     let username = req.params.username
-    User.find({ username: username })
-        .then(user => res.json(user[0].following))
-        .catch(err => res.status(400).json('Error: ' + err))
+    let { following } = req.body
+    User.updateOne(
+        { username: username },
+        { $pull: { following: following } }
+    )
+        .then(following => res.json(following))
+        .catch(error => res.json(error))
 }

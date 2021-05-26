@@ -1,30 +1,23 @@
 import React from 'react';
-import { InputText } from 'primereact/inputtext';
-import { Toolbar } from 'primereact/toolbar';
+import Header from './Toolbar';
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 
-export default function Explore() {
-
-    function Search() {
-        return (
-            <span className="p-input-icon-left">
-                <i className="pi pi-search" />
-                <InputText style={{ borderRadius: "50px", width: "500px" }} placeholder="Search" />
-            </span>
-        )
-    }
-
+export default function Notifications() {
     return (
-        <div>
-            <Toolbar left={Search()} />
-            <div className="p-grid">
-                <div className="p-col-7">
+        <Container>
+            <Col sm={12}>
+                <Header />
+            </Col>
+            <Row>
+                <Col sm={7}>
                     Explore
-                </div>
-                <div className="p-col-5">
-                    Hello world
-                </div>
-            </div>
-
-        </div>
+                </Col>
+                <Col sm={5}>
+                    Testing
+            </Col>
+            </Row>
+        </Container>
     )
 }

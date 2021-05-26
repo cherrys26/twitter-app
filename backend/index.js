@@ -14,7 +14,7 @@ app.use(cors());
 
 app.use("/api", authRoutes)
 app.get('/', (req, res) => {
-    res.send('<h2>This is from index.js file</h2>');
+    res.send('<h2>Backend is up and runnig :)</h2>');
 })
 mongoose.connect(process.env.DATABASE, {
     useNewUrlParser: true,
