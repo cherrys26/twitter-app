@@ -14,6 +14,7 @@ import Explore from "./sidebar-components/Explore"
 import Messages from "./sidebar-components/Messages"
 import Notifications from "./sidebar-components/Notifications"
 import Profile from "./sidebar-components/Profile"
+import OpenTweet from "./sidebar-components/Tweet"
 import Home from "./sidebar-components/Home";
 import Followers from "./sidebar-components/Followers"
 import Following from "./sidebar-components/Following"
@@ -68,6 +69,11 @@ const routes = [
         exact: true,
         main: () => <Following />
     },
+    {
+        path: "/:username/:id",
+        exact: true,
+        main: () => <OpenTweet />
+    }
 
 ];
 

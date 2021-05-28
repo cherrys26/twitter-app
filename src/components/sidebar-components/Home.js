@@ -13,7 +13,9 @@ import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import { AiOutlineMessage, AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import Loader from '../shared/Loading';
 import moment from 'moment';
-
+import { Link } from "react-router-dom"
+import Like from '../shared/Like';
+import Reply from '../shared/Reply';
 export default function Home(props) {
 
     let getUser = JSON.parse(localStorage.getItem("username"))
@@ -26,7 +28,7 @@ export default function Home(props) {
         setTimeout(() => setLoading(false), 1500)
     }, [])
 
-    const userTweets = axios.get(`${BASE_API_URL}/api/tweet/${getUser}`);
+    const userTweets = axios.get(`${BASE_API_URL}tweets/${getUser}`);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -36,7 +38,7 @@ export default function Home(props) {
                 username: getUser,
                 tweet: tweet
             }
-            await axios.post(`${BASE_API_URL}/api/tweet/${getUser}`, {
+            await axios.post(`${BASE_API_URL}tweets/${getUser}`, {
                 ...postTweet,
                 ...updatedData
             })
@@ -54,44 +56,6 @@ export default function Home(props) {
 
     function refreshPage() {
         window.location.reload(false);
-    }
-
-    const replyTip = (props) => (
-        <Tooltip id="button-tooltip" {...props}>
-            Reply
-        </Tooltip>
-    );
-    const likeTip = (props) => (
-        <Tooltip id="button-tooltip" {...props}>
-            Like
-        </Tooltip>
-    );
-
-    function Like() {
-        return (
-            <OverlayTrigger
-                placement="bottom"
-                delay={{ show: 600, hide: 200 }}
-                overlay={likeTip}
-            >
-                <button type="submit" className="homeButton" id=" likeButton">
-                    <AiOutlineHeart />
-                </button>
-
-            </OverlayTrigger >)
-    }
-    function Reply() {
-        return (
-            <OverlayTrigger
-                placement="bottom"
-                delay={{ show: 600, hide: 200 }}
-                overlay={replyTip}
-            >
-                <button type="submit" className="homeButton" id=" replyButton">
-                    <AiOutlineMessage />
-                </button>
-
-            </OverlayTrigger >)
     }
 
     return (
@@ -135,22 +99,25 @@ export default function Home(props) {
                             <Card key={tweets._id} style={{ marginBottom: "0.25px" }}>
                                 <Container>
                                     <Row>
-                                        <Row>
-                                            <Col >
-                                                <div>@{tweets.username}</div>
-                                            </Col>
-                                            <Col>
-                                                {moment(`${tweets.createdAt}`).format("LL") === moment().format("LL") ?
-                                                    (<div>{moment(`${tweets.createdAt}`).fromNow()}</div>)
-                                                    :
-                                                    (<div>{moment(`${tweets.createdAt}`).format("LL")}</div>)
-                                                }
-                                            </Col>
-                                        </Row>
-                                        <Col>
-                                            <div>{tweets.tweet}</div>
-                                        </Col>
-
+                                        <Link to={`${tweets.username}/${tweets._id}`} >
+                                            < button className="homeButton" >
+                                                <Row>
+                                                    <Col >
+                                                        <div>@{tweets.username}</div>
+                                                    </Col>
+                                                    <Col>
+                                                        {moment(`${tweets.createdAt}`).format("LL") === moment().format("LL") ?
+                                                            (<div>{moment(`${tweets.createdAt}`).fromNow()}</div>)
+                                                            :
+                                                            (<div>{moment(`${tweets.createdAt}`).format("LL")}</div>)
+                                                        }
+                                                    </Col>
+                                                </Row>
+                                                <Col>
+                                                    <div>{tweets.tweet}</div>
+                                                </Col>
+                                            </button>
+                                        </Link>
                                     </Row>
                                     <Row>
                                         <Col sm={{ span: 3, offset: 1 }}>

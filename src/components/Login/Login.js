@@ -14,7 +14,7 @@ function Login(props) {
     const onSubmit = async (data) => {
 
         try {
-            const response = await axios.post(`${BASE_API_URL}/api/signin`, data);
+            const response = await axios.post(`${BASE_API_URL}signin`, data);
             setToHomepage(props.history.push("/home") & localStorage.setItem("username", JSON.stringify(response.data.message.username))
             )
         } catch (error) {

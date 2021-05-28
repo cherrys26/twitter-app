@@ -1,5 +1,6 @@
 const Tweets = require('../models/Tweets');
-
+const mongoose = require('mongoose')
+const ObjectId = mongoose.ObjectId
 exports.postTweet = (req, res, next) => {
     let { tweet, username } = req.body;
     let errors = [];
@@ -39,4 +40,15 @@ exports.getTweet = (req, res) => {
     Tweets.find({ username: username })
         .then(user => res.json(user))
         .catch(err => res.status(400).json('Error: ' + err))
+}
+
+exports.getTweetById = (req, res) => {
+    let _id = req.params.id
+    Tweets.findById({ _id })
+        .then(tweet => res.json(tweet))
+        .catch(err => res.status(400).json('Error: ' + err))
+}
+exports.getAllTweets = (req, res) => {
+    Tweets.find().then(tweets => res.json(tweets)).catch(err => res.status(400).json('Error: ' + err))
+
 }

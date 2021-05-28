@@ -20,6 +20,8 @@ import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import moment from 'moment';
 import { AiTwotoneStar } from "react-icons/ai";
 import Loader from '../shared/Loading';
+import Like from '../shared/Like';
+import Reply from '../shared/Reply';
 export default function Profile() {
 
     const [user, setUser] = useState();
@@ -30,10 +32,10 @@ export default function Profile() {
 
     let getUser = JSON.parse(localStorage.getItem("username"))
     let path = location.pathname.split("/")
-    const userFollowing = axios.get(`${BASE_API_URL}/api/following/${getUser}`);
+    const userFollowing = axios.get(`${BASE_API_URL}following/${getUser}`);
 
-    const userProfile = axios.get(`${BASE_API_URL}/api/user/${path[1]}`);
-    const userTweets = axios.get(`${BASE_API_URL}/api/tweet/${path[1]}`);
+    const userProfile = axios.get(`${BASE_API_URL}user/${path[1]}`);
+    const userTweets = axios.get(`${BASE_API_URL}tweets/${path[1]}`);
 
     const results = followingUser.find(example => example === `${path[1]}`) ? (
         <Button style={{ backgroundColor: "purple", border: "purple", borderRadius: "20px" }}> Unfollow </Button>
@@ -78,7 +80,7 @@ export default function Profile() {
                                         return (
                                             <div key={user._id}>
                                                 { user.followers.length > 10 ?
-                                                    (<div>{user.username}
+                                                    (<div>@{user.username}
                                                         <OverlayTrigger
                                                             placement="right"
                                                             delay={{ show: 100, hide: 400 }}
@@ -86,7 +88,7 @@ export default function Profile() {
                                                         ><AiTwotoneStar />
                                                         </OverlayTrigger></div>)
                                                     :
-                                                    (<div>{user.username}</div>)
+                                                    (<div>@{user.username}</div>)
                                                 }
                                             </div>)
                                     })}
@@ -154,22 +156,33 @@ export default function Profile() {
                                     <Card key={tweets._id} style={{ marginBottom: "0.25px" }}>
                                         <Container>
                                             <Row>
-                                                <Row>
-                                                    <Col >
-                                                        <div>@{tweets.username}</div>
-                                                    </Col>
-                                                    <Col>
-                                                        {moment(`${tweets.createdAt}`).format("LL") === moment().format("LL") ?
-                                                            (<div>{moment(`${tweets.createdAt}`).fromNow()}</div>)
-                                                            :
-                                                            (<div>{moment(`${tweets.createdAt}`).format("LL")}</div>)
-                                                        }
-                                                    </Col>
-                                                </Row>
-                                                <Col>
-                                                    <div>{tweets.tweet}</div>
+                                                <Link to={`${tweets.username}/${tweets._id}`} >
+                                                    < button className="homeButton" >
+                                                        <Row>
+                                                            <Col >
+                                                                <div>@{tweets.username}</div>
+                                                            </Col>
+                                                            <Col>
+                                                                {moment(`${tweets.createdAt}`).format("LL") === moment().format("LL") ?
+                                                                    (<div>{moment(`${tweets.createdAt}`).fromNow()}</div>)
+                                                                    :
+                                                                    (<div>{moment(`${tweets.createdAt}`).format("LL")}</div>)
+                                                                }
+                                                            </Col>
+                                                        </Row>
+                                                        <Col>
+                                                            <div>{tweets.tweet}</div>
+                                                        </Col>
+                                                    </button>
+                                                </Link>
+                                            </Row>
+                                            <Row>
+                                                <Col sm={{ span: 3, offset: 1 }}>
+                                                    <Reply />
                                                 </Col>
-
+                                                <Col sm={3}>
+                                                    <Like />
+                                                </Col>
                                             </Row>
                                         </Container>
                                     </Card>

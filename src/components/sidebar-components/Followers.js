@@ -16,8 +16,8 @@ export default function Followers() {
     const [followerUser, setFollowerUser] = useState();
     const [user, setUser] = useState();
 
-    const userFollowers = axios.get(`${BASE_API_URL}/api/followers/${path[1]}`);
-    const userProfile = axios.get(`${BASE_API_URL}/api/user/${path[1]}`);
+    const userFollowers = axios.get(`${BASE_API_URL}followers/${path[1]}`);
+    const userProfile = axios.get(`${BASE_API_URL}user/${path[1]}`);
 
     console.log(user)
     console.log(followerUser)

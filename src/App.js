@@ -62,6 +62,7 @@ function PageSwitch() {
             <Route path="/notifications" component={Sidebar} />
             <Route path="/messages" component={Sidebar} />
             <Route exact path="/:username" component={Sidebar} />
+            <Route exact path="/:username/:id" component={Sidebar} />
             <Route path="/:username/followers" component={Sidebar} />
             <Route path="/:username/following" component={Sidebar} />
           </Switch>

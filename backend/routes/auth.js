@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const { signup, signin, allUsers, getUser, updateFollowers, getFollowers, deleteFollowers, getFollowing, updateFollowing, deleteFollowing } = require('../controllers/auth');
-const { postTweet, getTweet } = require('../controllers/tweets')
+const { postTweet, getTweet, getTweetById, getAllTweets } = require('../controllers/tweets')
 // Login and signup
 router.post('/signup', signup);
 router.post('/signin', signin);
@@ -18,6 +18,8 @@ router.get('/following/:username', getFollowing)
 router.put('/following/:username', updateFollowing)
 router.delete('/following/:username', deleteFollowing)
 // get and post tweets
-router.get("/tweet/:username", getTweet)
-router.post("/tweet/:username", postTweet);
+router.get("/tweets", getAllTweets)
+router.get("/tweets/:username", getTweet)
+router.get("/tweet/:id", getTweetById)
+router.post("/tweets/:username", postTweet);
 module.exports = router;

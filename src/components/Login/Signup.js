@@ -30,7 +30,7 @@ function Signup(props) {
                 bio: bio
             }
 
-            await axios.post(`${BASE_API_URL}/api/signup`, {
+            await axios.post(`${BASE_API_URL}signup`, {
                 ...updatedData
             });
             Swal.fire('Awesome!', "You're successfully registered!", 'success').then(
