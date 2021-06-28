@@ -4,7 +4,7 @@ import { AiOutlineMessage } from "react-icons/ai";
 import Tooltip from 'react-bootstrap/Tooltip';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
-
+import Form from 'react-bootstrap/Form';
 export default function Reply() {
     const replyTip = (props) => (
         <Tooltip id="button-tooltip" {...props}>
@@ -28,9 +28,11 @@ export default function Reply() {
 
             </OverlayTrigger >
             <Modal show={show} onHide={hideReply}>
-                <Modal.Header closeButton>
-                </Modal.Header>
-                <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
+                <Modal.Body>
+                    <Form>
+                        <Form.Control as="textarea" rows={3} />
+                    </Form>
+                </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={hideReply}>
                         Cancel

@@ -1,0 +1,34 @@
+.items {
+    list-style-type: none;
+    padding: 0 7%;
+    position: fixed;
+    height: -webkit-fill-available;
+    margin-top: 4rem;
+    font-size: larger;
+    text-align: left;
+    width: inherit;
+}
+
+ul li:last-child {
+    height: -webkit-fill-available;
+}
+
+.h5,
+h5 {
+    font-size: 25px;
+}
+
+@media screen and (max-width: 561px) {
+    .items {
+        padding-left: 10px;
+    }
+}
+@media screen and (max-width: 1281px) {
+    .hide {
+        display: none;
+    }
+
+    .items {
+        text-align: right;
+    }
+}

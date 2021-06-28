@@ -18,15 +18,12 @@ function Login(props) {
             setToHomepage(props.history.push("/home") & localStorage.setItem("username", JSON.stringify(response.data.message.username))
             )
         } catch (error) {
-            console.log(error);
-            if (error.response) {
-                console.log('error', error.response.data);
-            }
+            setToHomepage(alert("Invalid Username or Password"))
         }
     };
 
     return (
-        <div>
+        <div style={{ marginTop: "15%" }}>
             <Jumbotron fluid>
                 <h1>Welcome to Switter!</h1>
             </Jumbotron>
@@ -74,9 +71,9 @@ function Login(props) {
                             )}
                         </Form.Group>
                         <br />
-                        <motion.div whileHover={{ scale: 1.05 }} >
+                        <motion.div whileHover={{ scale: 1.05 }} style={{textAlign: "center"}}>
                             <Button variant="primary" type="submit" {...toHomepage}>
-                                Check Login
+                                Login
                             </Button>
                         </motion.div>
                     </div>

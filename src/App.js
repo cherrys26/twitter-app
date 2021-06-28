@@ -8,7 +8,8 @@ import {
   useLocation,
 } from "react-router-dom";
 import Sidebar from './components/Sidebar';
-import Home from './components//sidebar-components/Home'
+import Home from './components/sidebar-components/Home'
+import Profile from './components/sidebar-components/Profile'
 import Signup from './components/Login/Signup';
 function App() {
   return (
@@ -26,6 +27,8 @@ function PageSwitch() {
 
   const [user, setUser] = useState({});
   const [postTweet, setPostTweet] = useState({});
+  const [updateFollowing, setFollowing] = useState();
+  const [deleteFollowing, setDeleteFollowing] = useState();
 
   const updateUser = (data) => {
     setUser((prevUser) => ({ ...prevUser, ...data }));
@@ -37,6 +40,12 @@ function PageSwitch() {
 
   const TweetPost = () => {
     setPostTweet({})
+  }
+  const updateFollow = () => {
+    setFollowing()
+  }
+  const removeFollow = () => {
+    setDeleteFollowing()
   }
 
 
@@ -61,6 +70,11 @@ function PageSwitch() {
             <Route path="/explore" component={Sidebar} />
             <Route path="/notifications" component={Sidebar} />
             <Route path="/messages" component={Sidebar} />
+            <Route render={(props) => (<Profile {...props}
+              updateFollowing={updateFollowing} updateFollow={updateFollow}
+              {...props} deleteFollowing={deleteFollowing}
+              removeFollow={removeFollow}
+            />)} path="/:username" component={Sidebar} />
             <Route exact path="/:username" component={Sidebar} />
             <Route exact path="/:username/:id" component={Sidebar} />
             <Route path="/:username/followers" component={Sidebar} />

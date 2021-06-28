@@ -15,15 +15,9 @@ export default function Header() {
 
     return (
 
-        <Navbar bg="light" variant="light">
+        <Navbar style={{ backgroundColor: "transparent" }}>
             <Navbar.Brand style={{ textTransform: "capitalize" }}>{path[1]}</Navbar.Brand>
             <Navbar.Toggle />
-            <Navbar.Collapse className="justify-content-end">
-                <Form inline >
-                    <FormControl type="text" placeholder="Search" />
-                </Form>
-                <Button variant="primary">Search</Button>
-            </Navbar.Collapse>
         </Navbar>
 
     )

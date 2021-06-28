@@ -20,7 +20,7 @@ import Followers from "./sidebar-components/Followers"
 import Following from "./sidebar-components/Following"
 import { AiOutlineHome, AiOutlineBell, AiOutlineUser } from "react-icons/ai";
 import { BiSearchAlt, BiSend } from "react-icons/bi";
-import "./Sidebar.css"
+import "./Sidebar.scss"
 
 
 function getUser() {
@@ -102,32 +102,31 @@ export default function Sidebar(props) {
     return (
         <Router>
             <Container style={{ display: "flex", marginRight: 0, marginLeft: 0, maxWidth: "inherit" }}>
-                <Col sm={2}
 
+                <Col lg={3} sm={3} xs={2}
                     style={{
                         padding: "10px",
-                        width: "20%",
                     }}
                 >
                     <ul className="items">
                         <li>
-                            <Link to="/home" style={{ textDecoration: 'none' }}><AiOutlineHome /> Home</Link>
+                            <Link to="/home" style={{ textDecoration: 'none' }}><h5><AiOutlineHome className="icon" /> <span className="hide">Home</span></h5></Link>
                         </li>
                         <br />
                         <li>
-                            <Link to="/explore" style={{ textDecoration: 'none' }} ><BiSearchAlt /> Explore</Link>
+                            <Link to="/explore" style={{ textDecoration: 'none' }} ><h5><BiSearchAlt className="icon" /> <span className="hide">Explore</span></h5></Link>
                         </li>
                         <br />
                         <li>
-                            <Link to="/notifications" style={{ textDecoration: 'none' }}><AiOutlineBell /> Notifications</Link>
+                            <Link to="/notifications" style={{ textDecoration: 'none' }}><h5><AiOutlineBell className="icon" /> <span className="hide">Notifications</span></h5></Link>
                         </li>
                         <br />
                         <li>
-                            <Link to="/messages" style={{ textDecoration: 'none' }}><BiSend /> Messages</Link>
+                            <Link to="/messages" style={{ textDecoration: 'none' }}><h5><BiSend className="icon" /> <span className="hide">Messages</span></h5></Link>
                         </li>
                         <br />
                         <li>
-                            <Link to={`/${getUser()}`} style={{ textDecoration: 'none' }}><AiOutlineUser /> Profile</Link>
+                            <Link to={`/${getUser()}`} style={{ textDecoration: 'none' }}><h5><AiOutlineUser className="icon" /> <span className="hide">Profile</span></h5></Link>
                         </li>
                         <br />
                         <li>
@@ -143,7 +142,8 @@ export default function Sidebar(props) {
                     </ul>
                 </Col>
 
-                <Col sm={10} style={{ flex: 1, padding: "10px" }}>
+
+                <Col lg={9} sm={9} xs={10} style={{ flex: 1, padding: "10px" }}>
                     <Switch>
                         {routes.map((route, index) => (
                             <Route

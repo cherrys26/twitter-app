@@ -22,7 +22,7 @@ import { AiTwotoneStar } from "react-icons/ai";
 import Loader from '../shared/Loading';
 import Like from '../shared/Like';
 import Reply from '../shared/Reply';
-export default function Profile() {
+export default function Profile(props) {
 
     const [user, setUser] = useState();
     const [tweets, setTweets] = useState([]);
@@ -33,14 +33,54 @@ export default function Profile() {
     let getUser = JSON.parse(localStorage.getItem("username"))
     let path = location.pathname.split("/")
     const userFollowing = axios.get(`${BASE_API_URL}following/${getUser}`);
-
     const userProfile = axios.get(`${BASE_API_URL}user/${path[1]}`);
     const userTweets = axios.get(`${BASE_API_URL}tweets/${path[1]}`);
 
+    const handleFollow = async (event) => {
+        event.preventDefault();
+        try {
+            const { postTweet } = props
+            const updatedData = {
+                username: path[1],
+
+            }
+            await axios.post(`${BASE_API_URL}following/${getUser}`, {
+                ...postTweet,
+                ...updatedData
+            })
+        } catch (error) {
+            if (error.response) {
+
+                console.log('error', error.response.data);
+            }
+        }
+    };
+    const handleUnfollow = async (event) => {
+        event.preventDefault();
+        try {
+            const { updateFollowing } = props
+            const updatedData = {
+                username: path[1],
+
+            }
+            await axios.delete(`${BASE_API_URL}following/${getUser}`, {
+                ...updateFollowing,
+                ...updatedData
+            })
+        } catch (error) {
+            if (error.response) {
+
+                console.log('error', error.response.data);
+            }
+        }
+    };
+
     const results = followingUser.find(example => example === `${path[1]}`) ? (
-        <Button style={{ backgroundColor: "purple", border: "purple", borderRadius: "20px" }}> Unfollow </Button>
+        <Form onSubmit={handleUnfollow}>
+            <Button style={{ backgroundColor: "purple", border: "purple", borderRadius: "20px" }}> Unfollow </Button>
+        </Form>
     ) : (
-        <Button style={{ backgroundColor: "purple", border: "purple", borderRadius: "20px" }}> Follow </Button>
+        <Button onSubmit={handleFollow} style={{ backgroundColor: "purple", border: "purple", borderRadius: "20px" }}> Follow </Button>
     )
 
     function Foll() {

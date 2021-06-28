@@ -11,11 +11,11 @@ router.get('/user', allUsers)
 router.get("/user/:username", getUser)
 // followers
 router.get('/followers/:username', getFollowers)
-router.put('/followers/:username', updateFollowers)
+router.post('/followers/:username', updateFollowers)
 router.delete('/followers/:username', deleteFollowers)
 //following
 router.get('/following/:username', getFollowing)
-router.put('/following/:username', updateFollowing)
+router.post('/following/:username', updateFollowing)
 router.delete('/following/:username', deleteFollowing)
 // get and post tweets
 router.get("/tweets", getAllTweets)
