@@ -24,15 +24,16 @@
   text-shadow: 0px 0px 0px transparent;
   width: inherit;
 }
+#replyButton,
 #likeButton {
-  color: rgba(255, 0, 0, 0.767);
+  color: grey;
 }
-#replyButton {
-  color: rgba(0, 0, 0, 0.767);
-}
-
 @media screen and (max-width: 993px) {
   .searchHome {
     display: none;
   }
+}
+
+.form-control::placeholder {
+  color: lightgray;
 }

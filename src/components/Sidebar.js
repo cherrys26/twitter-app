@@ -103,7 +103,7 @@ export default function Sidebar(props) {
         <Router>
             <Container style={{ display: "flex", marginRight: 0, marginLeft: 0, maxWidth: "inherit" }}>
 
-                <Col lg={3} sm={3} xs={2}
+                <Col lg={3} sm={1} xs={2}
                     style={{
                         padding: "10px",
                     }}
@@ -143,7 +143,7 @@ export default function Sidebar(props) {
                 </Col>
 
 
-                <Col lg={9} sm={9} xs={10} style={{ flex: 1, padding: "10px" }}>
+                <Col lg={9} sm={11} xs={10} style={{ flex: 1, padding: "10px" }}>
                     <Switch>
                         {routes.map((route, index) => (
                             <Route

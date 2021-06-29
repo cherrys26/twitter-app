@@ -1,4 +1,4 @@
-$base-color: #ad20ff;
+$base-color: #ffffff;
 $blue-color: #fcff49;
 
 * {
@@ -14,6 +14,7 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: $base-color;
+    background-color: black;
 }
 
 code {

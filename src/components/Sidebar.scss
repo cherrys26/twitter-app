@@ -23,12 +23,13 @@ h5 {
         padding-left: 10px;
     }
 }
-@media screen and (max-width: 1281px) {
+@media screen and (max-width: 1200px) {
     .hide {
         display: none;
     }
 
     .items {
         text-align: right;
+        padding-right: 5%;
     }
 }

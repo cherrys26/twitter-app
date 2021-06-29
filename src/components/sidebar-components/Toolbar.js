@@ -16,7 +16,7 @@ export default function Header() {
     return (
 
         <Navbar style={{ backgroundColor: "transparent" }}>
-            <Navbar.Brand style={{ textTransform: "capitalize" }}>{path[1]}</Navbar.Brand>
+            <Navbar.Brand style={{ textTransform: "capitalize", color: "white" }}><b>{path[1]}</b></Navbar.Brand>
             <Navbar.Toggle />
         </Navbar>
 

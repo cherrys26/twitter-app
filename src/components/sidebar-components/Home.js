@@ -9,13 +9,12 @@ import ListGroup from 'react-bootstrap/ListGroup'
 import Image from 'react-bootstrap/Image'
 import Form from 'react-bootstrap/Form';
 import { Col, Container, Row } from 'react-bootstrap';
-import Tooltip from 'react-bootstrap/Tooltip'
+import { AiOutlineRetweet, AiTwotoneStar } from "react-icons/ai";
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
-import { AiOutlineMessage, AiOutlineHeart, AiFillHeart } from "react-icons/ai";
-import Loader from '../shared/Loading';
 import moment from 'moment';
 import { Link } from "react-router-dom"
 import Like from '../shared/Like';
+import Tooltip from 'react-bootstrap/Tooltip'
 import Reply from '../shared/Reply';
 export default function Home(props) {
 
@@ -24,11 +23,7 @@ export default function Home(props) {
     const [tweet, setTweet] = useState('')
     const [tweets, setTweets] = useState([]);
     const [user, setUser] = useState([]);
-    const [loading, setLoading] = useState(true)
 
-    useEffect(() => {
-        setTimeout(() => setLoading(false), 1500)
-    }, [])
 
     const userProfile = axios.get(`${BASE_API_URL}user/${getUser}`);
     const userTweets = axios.get(`${BASE_API_URL}tweets/${getUser}`);
@@ -56,11 +51,18 @@ export default function Home(props) {
 
     useEffect(() => {
         userTweets.then(tweetData => setTweets(tweetData.data)) // eslint-disable-next-line
-    }, [userTweets])
+    }, [])
 
     useEffect(() => {
         userProfile.then(data => setUser(data.data)) // eslint-disable-next-line
     }, [])
+
+
+    const renderTooltip = (props) => (
+        <Tooltip id="button-tooltip" {...props}>
+            Verified User :D
+        </Tooltip>
+    );
 
     return (
         <>
@@ -69,8 +71,8 @@ export default function Home(props) {
                 <Row>
                     <Col lg={7}>
                         <Header />
-                        <Container>
-                            <Card >
+                        <Container >
+                            <Card style={{ backgroundColor: "black", border: "1px solid grey" }}>
                                 <Row style={{ marginTop: "20px" }}>
                                     <Col xs={1} >
                                         <Image src="https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png" style={{ width: "45px", height: "45px" }} roundedCircle />
@@ -86,7 +88,7 @@ export default function Home(props) {
                                                         name="tweet"
                                                         value={tweet}
                                                         onChange={(event) => setTweet(event.target.value)}
-                                                        style={{ height: "80px", border: "0px", color: "black" }} />
+                                                        style={{ backgroundColor: "black", height: "80px", border: "0px", color: "white" }} />
                                                 </Form.Group>
                                                 <Button className="tweet-button" type="submit">Tweet </Button>
                                             </Form>
@@ -99,38 +101,57 @@ export default function Home(props) {
 
                         {tweets && tweets.slice(0).reverse().map(tweets => {
                             return (
-                                <Card key={tweets._id} style={{ marginBottom: "0.25px" }}>
-                                    <Container>
+                                <Card key={tweets._id} style={{ marginBottom: "0.25px", backgroundColor: "black", border: "1px solid grey" }}>
+                                    <Container style={{ padding: "5px" }}>
                                         <Row>
-                                            <Link to={`${tweets.username}/${tweets._id}`} >
-                                                < button className="homeButton" >
+                                            <Col xs={1} style={{ paddingLeft: "5%" }}>
+                                                <Image src="https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png" style={{ width: "45px", height: "45px" }} roundedCircle />
+                                            </Col>
+                                            <Col xs={11} style={{ paddingLeft: "1%" }}>
+                                                <Container>
                                                     <Row>
-                                                        <Col >
-                                                            <span> {user && user.map(user => {
-                                                                return (
-                                                                    <span> {user.name} </span>)
-                                                            })}@{tweets.username}</span>
+                                                        <Link to={`${tweets.username}/${tweets._id}`} >
+                                                            < button className="homeButton" >
+                                                                <Row>
+                                                                    <Col xs={{ span: 11, offset: 1 }} style={{ padding: "0px", textAlign: "left" }}>
+                                                                        {user && user.map(user => {
+                                                                            return (
+                                                                                <span key={user._id}>
+                                                                                    <Link to={`${user.name}`}
+                                                                                        style={{ color: "white", textDecoration: "none", fontSize: "16px" }}>
+                                                                                        <b>{user.name}</b>
+                                                                                    </Link></span>)
+                                                                        })}
+                                                                        <span style={{ color: "grey", fontSize: "15x", paddingLeft: "6px" }}>
+                                                                            @{tweets.username}
+                                                                            <span style={{ padding: "0 4px" }}>&#183;</span>
+                                                                            {moment(`${tweets.createdAt}`).format("LL") === moment().format("LL") ?
+                                                                                (<span>{moment(`${tweets.createdAt}`).fromNow()}</span>)
+                                                                                :
+                                                                                (<span>{moment(`${tweets.createdAt}`).format("LL")}</span>)
+                                                                            }</span>
+                                                                    </Col>
+                                                                </Row>
+                                                                <Row>
+                                                                    <Col xs={{ span: 10, offset: 1 }} style={{ textAlign: "left", padding: "0" }}>
+                                                                        <div style={{ paddingBottom: "10px", color: "white" }}>{tweets.tweet}</div>
+                                                                    </Col>
+                                                                </Row>
+                                                            </button>
+                                                        </Link>
+                                                    </Row>
+                                                    <Row>
+                                                        <Col sm={{ span: 3, offset: 1 }}>
+                                                            <Reply />
                                                         </Col>
-                                                        <Col>
-                                                            {moment(`${tweets.createdAt}`).format("LL") === moment().format("LL") ?
-                                                                (<div>{moment(`${tweets.createdAt}`).fromNow()}</div>)
-                                                                :
-                                                                (<div>{moment(`${tweets.createdAt}`).format("LL")}</div>)
-                                                            }
+                                                        <Col sm={3}>
+                                                            <AiOutlineRetweet />
+                                                        </Col>
+                                                        <Col sm={3}>
+                                                            <Like />
                                                         </Col>
                                                     </Row>
-                                                    <Col>
-                                                        <div>{tweets.tweet}</div>
-                                                    </Col>
-                                                </button>
-                                            </Link>
-                                        </Row>
-                                        <Row>
-                                            <Col sm={{ span: 3, offset: 1 }}>
-                                                <Reply />
-                                            </Col>
-                                            <Col sm={3}>
-                                                <Like />
+                                                </Container>
                                             </Col>
                                         </Row>
                                     </Container>
@@ -139,15 +160,15 @@ export default function Home(props) {
                         })}
                     </Col>
                     <Col lg={4} className="searchHome">
-                        <Form inline >
-                            <Form.Control type="text" placeholder="Search Switter" />
+                        <Form inline>
+                            <Form.Control type="text" placeholder="Search Switter" style={{ border: "1px solid darkgrey", borderRadius: "1rem", backgroundColor: "grey", color: "white" }} />
                         </Form>
-                        <Card style={{ marginTop: "20px" }}>
+                        <Card style={{ marginTop: "20px", border: "1px solid grey" }}>
 
                             <ListGroup variant="flush">
-                                <ListGroup.Item>Cras justo odio fff fffff ffff f bf f f fff fff kkkkkkkkl</ListGroup.Item>
-                                <ListGroup.Item>hello</ListGroup.Item>
-                                <ListGroup.Item>Vestibulum at eros</ListGroup.Item>
+                                <ListGroup.Item style={{ backgroundColor: "black", border: "1px solid grey", color: "white" }}>Cras justo odio fff fffff ffff f bf f f fff fff kkkkkkkkl</ListGroup.Item>
+                                <ListGroup.Item style={{ backgroundColor: "black", border: "1px solid grey", color: "white" }}>hello</ListGroup.Item>
+                                <ListGroup.Item style={{ backgroundColor: "black", border: "1px solid grey", color: "white" }}>Vestibulum at eros</ListGroup.Item>
                             </ListGroup>
                         </Card>
                     </Col>

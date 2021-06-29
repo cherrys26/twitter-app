@@ -18,7 +18,8 @@ import Button from 'react-bootstrap/Button'
 import Tooltip from 'react-bootstrap/Tooltip'
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import moment from 'moment';
-import { AiTwotoneStar } from "react-icons/ai";
+
+import { AiTwotoneStar, AiOutlineRetweet } from "react-icons/ai";
 import Loader from '../shared/Loading';
 import Like from '../shared/Like';
 import Reply from '../shared/Reply';
@@ -89,6 +90,7 @@ export default function Profile(props) {
         )
     }
 
+
     useEffect(() => {
         userFollowing.then(followingData => setFollowingUser(followingData.data)) // eslint-disable-next-line
     }, [])
@@ -114,26 +116,26 @@ export default function Profile(props) {
                 <Container>
                     <Col md={12}>
                         <Row>
-                            <Navbar bg="light" variant="light" style={{ justifyContent: "space-between" }}>
+                            <Navbar style={{ justifyContent: "space-between", backgroundColor: "transparent" }}>
                                 <Navbar.Brand>
                                     {user && user.map(user => {
                                         return (
                                             <div key={user._id}>
-                                                { user.followers.length > 10 ?
-                                                    (<div>@{user.username}
+                                                {user.followers.length > 10 ?
+                                                    (<b>{user.name}
                                                         <OverlayTrigger
                                                             placement="right"
                                                             delay={{ show: 100, hide: 400 }}
                                                             overlay={renderTooltip}
                                                         ><AiTwotoneStar />
-                                                        </OverlayTrigger></div>)
+                                                        </OverlayTrigger></b>)
                                                     :
-                                                    (<div>@{user.username}</div>)
+                                                    (<b>{user.name}</b>)
                                                 }
                                             </div>)
                                     })}
 
-                                Tweets: {tweets.length}
+                                    <span style={{ color: "grey", fontSize: "14px" }}>{tweets.length} Tweets</span>
                                 </Navbar.Brand>
                                 <Form inline>
                                     <FormControl type="text" placeholder="Search" className="mr-sm-2" />
@@ -163,28 +165,28 @@ export default function Profile(props) {
                                             </Col>
                                         </Row>
                                         <Card.Body style={{ textAlign: "left" }}>
-                                            <Card.Title>{user.name}</Card.Title>
-                                            <Card.Subtitle className="mb-2 text-muted">@{user.username}</Card.Subtitle>
+                                            <Card.Title><b>{user.name}</b></Card.Title>
+                                            <Card.Subtitle style={{ color: "grey", fontSize: "14px", paddingBottom: "10px" }}>@{user.username}</Card.Subtitle>
                                             <Card.Text className="mb-2">
                                                 {user.bio}
                                                 <br />
-                                            Joined on: {moment(`${user.createdAt}`).format("LL")}
+                                                Joined on: {moment(`${user.createdAt}`).format("LL")}
                                             </Card.Text>
-                                            <Card.Footer>
+                                            <Card.Text>
                                                 <Row>
                                                     <Col md={3}>
                                                         <Link to={`${user.username}/followers`} style={{ textDecoration: 'none' }}>
-                                                            {user.followers.length} Followers
+                                                            <span style={{ color: "inherit" }}>{user.followers.length}</span> <span style={{ color: "grey", fontSize: "14px" }}>Followers</span>
                                                         </Link>
                                                     </Col>
                                                     <Col md={3}>
                                                         <Link to={`${user.username}/following`} style={{ textDecoration: 'none' }}>
-                                                            {user.following.length} Following
-                                                    </Link>
+                                                            <span style={{ color: "inherit" }}>{user.following.length}</span> <span style={{ color: "grey", fontSize: "14px" }}>Following</span>
+                                                        </Link>
                                                     </Col>
                                                 </Row>
 
-                                            </Card.Footer>
+                                            </Card.Text>
                                         </Card.Body>
                                     </Card>
                                 )
@@ -194,34 +196,56 @@ export default function Profile(props) {
                             {tweets && tweets.slice(0).reverse().map(tweets => {
                                 return (
                                     <Card key={tweets._id} style={{ marginBottom: "0.25px" }}>
-                                        <Container>
+                                        <Container style={{ padding: "5px" }}>
                                             <Row>
-                                                <Link to={`${tweets.username}/${tweets._id}`} >
-                                                    < button className="homeButton" >
+                                                <Col xs={1} style={{ paddingLeft: "5%" }}>
+                                                    <Image src="https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png" style={{ width: "45px", height: "45px" }} roundedCircle />
+                                                </Col>
+                                                <Col xs={11} style={{ paddingLeft: "1%" }}>
+                                                    <Container>
                                                         <Row>
-                                                            <Col >
-                                                                <div>@{tweets.username}</div>
+                                                            <Row>
+                                                                <Col xs={{ span: 11, offset: 1 }} style={{ padding: "0px", textAlign: "left" }}>
+                                                                    {user && user.map(user => {
+                                                                        return (
+                                                                            <span key={user._id}>
+                                                                                <Link to={`${user.name}`}
+                                                                                    style={{ color: "inherit", textDecoration: "none", fontSize: "16px" }}>
+                                                                                    <b>{user.name}</b>
+                                                                                </Link></span>)
+                                                                    })}
+                                                                    <span style={{ color: "grey", fontSize: "15x", paddingLeft: "6px" }}>
+                                                                        @{tweets.username}
+                                                                        <span style={{ padding: "0 4px" }}>&#183;</span>
+                                                                        {moment(`${tweets.createdAt}`).format("LL") === moment().format("LL") ?
+                                                                            (<span>{moment(`${tweets.createdAt}`).fromNow()}</span>)
+                                                                            :
+                                                                            (<span>{moment(`${tweets.createdAt}`).format("LL")}</span>)
+                                                                        }</span>
+                                                                </Col>
+                                                            </Row>
+                                                            <Link to={`${tweets.username}/${tweets._id}`} >
+                                                                < button className="homeButton" >
+                                                                    <Row>
+                                                                        <Col xs={{ span: 10, offset: 1 }} style={{ textAlign: "left", padding: "0" }}>
+                                                                            <div style={{ paddingBottom: "10px" }}>{tweets.tweet}</div>
+                                                                        </Col>
+                                                                    </Row>
+                                                                </button>
+                                                            </Link>
+                                                        </Row>
+                                                        <Row>
+                                                            <Col xs={{ span: 3, offset: 1 }}>
+                                                                <Reply />
                                                             </Col>
-                                                            <Col>
-                                                                {moment(`${tweets.createdAt}`).format("LL") === moment().format("LL") ?
-                                                                    (<div>{moment(`${tweets.createdAt}`).fromNow()}</div>)
-                                                                    :
-                                                                    (<div>{moment(`${tweets.createdAt}`).format("LL")}</div>)
-                                                                }
+                                                            <Col xs={3}>
+                                                                <AiOutlineRetweet />
+                                                            </Col>
+                                                            <Col xs={3}>
+                                                                <Like />
                                                             </Col>
                                                         </Row>
-                                                        <Col>
-                                                            <div>{tweets.tweet}</div>
-                                                        </Col>
-                                                    </button>
-                                                </Link>
-                                            </Row>
-                                            <Row>
-                                                <Col sm={{ span: 3, offset: 1 }}>
-                                                    <Reply />
-                                                </Col>
-                                                <Col sm={3}>
-                                                    <Like />
+                                                    </Container>
                                                 </Col>
                                             </Row>
                                         </Container>
@@ -231,7 +255,7 @@ export default function Profile(props) {
                         </Col>
                         <Col md={5}>
                             hello world
-                    </Col>
+                        </Col>
                     </Row>
                 </Container>) :
                 (
