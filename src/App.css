@@ -2,8 +2,8 @@
   margin-right: 10px !important;
   margin-bottom: 10px !important;
   border-radius: 50px !important;
-  border-color: purple;
-  background-color: purple;
+  border-color: deeppink;
+  background-color: deeppink;
 }
 
 .login-page {
@@ -36,4 +36,14 @@
 
 .form-control::placeholder {
   color: lightgray;
+}
+
+.list-ava:hover,
+.list-button:hover,
+.tweet-button:hover {
+  background-color: #d5137c !important;
+}
+
+.tweet-button:hover {
+  border: 1px solid #d5137c;
 }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import axios from 'axios';
 import { BASE_API_URL } from "../../utils/constants"
 import Header from './Toolbar';
@@ -15,8 +15,12 @@ import moment from 'moment';
 import { Link } from "react-router-dom"
 import Like from '../shared/Like';
 import Tooltip from 'react-bootstrap/Tooltip'
+import Spinner from 'react-bootstrap/Spinner'
 import Reply from '../shared/Reply';
+import Retweet from '../shared/Re';
 export default function Home(props) {
+
+    const Tweets = lazy(() => import('../shared/Tweets'))
 
     let getUser = JSON.parse(localStorage.getItem("username"))
 
@@ -47,6 +51,7 @@ export default function Home(props) {
             }
         };
         event.target.reset()
+        console.log(tweet)
     };
 
     useEffect(() => {
@@ -72,7 +77,7 @@ export default function Home(props) {
                     <Col lg={7}>
                         <Header />
                         <Container >
-                            <Card style={{ backgroundColor: "black", border: "1px solid grey" }}>
+                            <Card style={{ backgroundColor: "black", border: "1px solid #80808087" }}>
                                 <Row style={{ marginTop: "20px" }}>
                                     <Col xs={1} >
                                         <Image src="https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png" style={{ width: "45px", height: "45px" }} roundedCircle />
@@ -97,78 +102,21 @@ export default function Home(props) {
                                 </Row>
                             </Card>
                         </Container>
-                        <br />
+                        <Suspense fallback={<div><Spinner animation="border" variant="danger" /></div>}>
+                            <Tweets />
+                        </Suspense>
 
-                        {tweets && tweets.slice(0).reverse().map(tweets => {
-                            return (
-                                <Card key={tweets._id} style={{ marginBottom: "0.25px", backgroundColor: "black", border: "1px solid grey" }}>
-                                    <Container style={{ padding: "5px" }}>
-                                        <Row>
-                                            <Col xs={1} style={{ paddingLeft: "5%" }}>
-                                                <Image src="https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png" style={{ width: "45px", height: "45px" }} roundedCircle />
-                                            </Col>
-                                            <Col xs={11} style={{ paddingLeft: "1%" }}>
-                                                <Container>
-                                                    <Row>
-                                                        <Link to={`${tweets.username}/${tweets._id}`} >
-                                                            < button className="homeButton" >
-                                                                <Row>
-                                                                    <Col xs={{ span: 11, offset: 1 }} style={{ padding: "0px", textAlign: "left" }}>
-                                                                        {user && user.map(user => {
-                                                                            return (
-                                                                                <span key={user._id}>
-                                                                                    <Link to={`${user.name}`}
-                                                                                        style={{ color: "white", textDecoration: "none", fontSize: "16px" }}>
-                                                                                        <b>{user.name}</b>
-                                                                                    </Link></span>)
-                                                                        })}
-                                                                        <span style={{ color: "grey", fontSize: "15x", paddingLeft: "6px" }}>
-                                                                            @{tweets.username}
-                                                                            <span style={{ padding: "0 4px" }}>&#183;</span>
-                                                                            {moment(`${tweets.createdAt}`).format("LL") === moment().format("LL") ?
-                                                                                (<span>{moment(`${tweets.createdAt}`).fromNow()}</span>)
-                                                                                :
-                                                                                (<span>{moment(`${tweets.createdAt}`).format("LL")}</span>)
-                                                                            }</span>
-                                                                    </Col>
-                                                                </Row>
-                                                                <Row>
-                                                                    <Col xs={{ span: 10, offset: 1 }} style={{ textAlign: "left", padding: "0" }}>
-                                                                        <div style={{ paddingBottom: "10px", color: "white" }}>{tweets.tweet}</div>
-                                                                    </Col>
-                                                                </Row>
-                                                            </button>
-                                                        </Link>
-                                                    </Row>
-                                                    <Row>
-                                                        <Col sm={{ span: 3, offset: 1 }}>
-                                                            <Reply />
-                                                        </Col>
-                                                        <Col sm={3}>
-                                                            <AiOutlineRetweet />
-                                                        </Col>
-                                                        <Col sm={3}>
-                                                            <Like />
-                                                        </Col>
-                                                    </Row>
-                                                </Container>
-                                            </Col>
-                                        </Row>
-                                    </Container>
-                                </Card>
-                            )
-                        })}
                     </Col>
                     <Col lg={4} className="searchHome">
                         <Form inline>
-                            <Form.Control type="text" placeholder="Search Switter" style={{ border: "1px solid darkgrey", borderRadius: "1rem", backgroundColor: "grey", color: "white" }} />
+                            <Form.Control type="text" placeholder="Search Switter" style={{ border: "1px solid #80808087", borderRadius: "1rem", backgroundColor: "#80808087", color: "white" }} />
                         </Form>
-                        <Card style={{ marginTop: "20px", border: "1px solid grey" }}>
+                        <Card style={{ marginTop: "20px", border: "1px solid #80808087", backgroundColor: "inherit" }}>
 
-                            <ListGroup variant="flush">
-                                <ListGroup.Item style={{ backgroundColor: "black", border: "1px solid grey", color: "white" }}>Cras justo odio fff fffff ffff f bf f f fff fff kkkkkkkkl</ListGroup.Item>
-                                <ListGroup.Item style={{ backgroundColor: "black", border: "1px solid grey", color: "white" }}>hello</ListGroup.Item>
-                                <ListGroup.Item style={{ backgroundColor: "black", border: "1px solid grey", color: "white" }}>Vestibulum at eros</ListGroup.Item>
+                            <ListGroup variant="flush" style={{ border: "1px solid #80808087" }}>
+                                <ListGroup.Item style={{ backgroundColor: "black", border: "1px solid #80808087", color: "white" }}>Cras justo odio fff fffff ffff f bf f f fff fff kkkkkkkkl</ListGroup.Item>
+                                <ListGroup.Item style={{ backgroundColor: "black", border: "1px solid #80808087", color: "white" }}>hello</ListGroup.Item>
+                                <ListGroup.Item style={{ backgroundColor: "black", border: "1px solid #80808087", color: "white" }}>Vestibulum at eros</ListGroup.Item>
                             </ListGroup>
                         </Card>
                     </Col>

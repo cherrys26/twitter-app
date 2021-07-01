@@ -5,6 +5,7 @@ import Tooltip from 'react-bootstrap/Tooltip';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import { motion } from 'framer-motion'
 export default function Reply() {
     const replyTip = (props) => (
         <Tooltip id="button-tooltip" {...props}>
@@ -23,7 +24,11 @@ export default function Reply() {
                 overlay={replyTip}
             >
                 <button onClick={showReply} className="homeButton" id="replyButton">
-                    <AiOutlineMessage />
+                    <motion.span whileHover={{
+                        borderRadius: "10px", backgroundColor: "rgba(0, 0, 250, 0.2)", color: "blue"
+                    }}>
+                        < AiOutlineMessage />
+                    </motion.span>
                 </button>
 
             </OverlayTrigger >

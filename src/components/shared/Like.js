@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import Tooltip from 'react-bootstrap/Tooltip'
+import { motion } from 'framer-motion'
 
 export default function Like() {
     const likeTip = (props) => (
@@ -9,6 +10,9 @@ export default function Like() {
             Like
         </Tooltip>
     );
+
+
+
     return (
         <OverlayTrigger
             placement="bottom"
@@ -16,7 +20,9 @@ export default function Like() {
             overlay={likeTip}
         >
             <button type="submit" className="homeButton" id="likeButton">
-                <AiOutlineHeart />
+                <motion.span whileHover={{
+                    borderRadius: "10px", backgroundColor: "rgba(250, 00, 00, 0.2)", color: "red"
+                }}><AiOutlineHeart /></motion.span>
             </button>
 
         </OverlayTrigger >)

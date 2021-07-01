@@ -6,7 +6,6 @@
     margin-top: 4rem;
     font-size: larger;
     text-align: left;
-    width: inherit;
 }
 
 ul li:last-child {
@@ -29,7 +28,49 @@ h5 {
     }
 
     .items {
-        text-align: right;
+        text-align: center;
         padding-right: 5%;
     }
+    .list-button {
+        display: none;
+    }
+    .list-ava {
+        display: inline-block !important;
+        background-color: deeppink;
+        border: deeppink;
+        border-radius: 50px;
+        width: 50px;
+        height: 50px;
+        
+    }
+}
+
+.nav-link {
+    color: grey;
+}
+
+.nav-tabs .nav-item.show .nav-link,
+.nav-tabs .nav-link.active {
+    color: deeppink;
+    background-color: black;
+    border: 0px;
+    border-bottom: 1px solid deeppink;
+}
+
+.nav-tabs .nav-link:focus,
+.nav-tabs .nav-link:hover {
+    background-color: rgba(255, 20, 145, 0.3);
+    color: deeppink;
+    border: 0px;
+}
+
+.list-button {
+    background-color: deeppink;
+    border: deeppink;
+    border-radius: 50px;
+    width: -webkit-fill-available;
+}
+
+.list-ava {
+    display: none;
 }
