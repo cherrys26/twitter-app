@@ -21,7 +21,7 @@ export default function Retweet() {
             >
                 <button type="submit" className="homeButton" id="likeButton">
                     <motion.span whileHover={{
-                        borderRadius: "10px", backgroundColor: "rgba(0, 250, 0, 0.2)", color: "green"
+                        borderRadius: "10px", backgroundColor: "rgba(0, 250, 0, 0.2)", color: "rgba(0, 250, 0, 1)"
                     }}>
                         < AiOutlineRetweet />
                     </motion.span>

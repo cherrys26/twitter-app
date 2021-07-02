@@ -1,13 +1,14 @@
 const express = require('express');
 const router = express.Router();
 
-const { signup, signin, allUsers, getUser, updateFollowers, getFollowers, deleteFollowers, getFollowing, updateFollowing, deleteFollowing } = require('../controllers/auth');
+const { signup, signin, allUsers, getUser, getSearch, updateFollowers, getFollowers, deleteFollowers, getFollowing, updateFollowing, deleteFollowing } = require('../controllers/auth');
 const { postTweet, getTweet, getTweetById, getAllTweets } = require('../controllers/tweets')
 // Login and signup
 router.post('/signup', signup);
 router.post('/signin', signin);
 //get user information
 router.get('/user', allUsers)
+router.get('/users', getSearch)
 router.get("/user/:username", getUser)
 // followers
 router.get('/followers/:username', getFollowers)

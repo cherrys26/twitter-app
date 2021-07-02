@@ -21,7 +21,7 @@ export default function Like() {
         >
             <button type="submit" className="homeButton" id="likeButton">
                 <motion.span whileHover={{
-                    borderRadius: "10px", backgroundColor: "rgba(250, 00, 00, 0.2)", color: "red"
+                    borderRadius: "10px", backgroundColor: "rgba(250, 00, 00, 0.2)", color: "rgba(250, 00, 00, 1)"
                 }}><AiOutlineHeart /></motion.span>
             </button>
 

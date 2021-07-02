@@ -1,5 +1,6 @@
 import React from 'react';
 import Header from './Toolbar';
+import AsyncExample from '../shared/Search';
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
@@ -14,9 +15,9 @@ export default function Messages() {
                 <Col sm={7}>
                     Messgaes
                 </Col>
-                <Col sm={5}>
-                    Testing
-            </Col>
+                <Col sm={4}>
+                    <AsyncExample />
+                </Col>
             </Row>
         </Container>
     )

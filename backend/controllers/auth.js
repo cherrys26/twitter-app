@@ -127,6 +127,11 @@ exports.getUser = (req, res) => {
         .then(user => res.json(user))
         .catch(err => res.status(400).json('Error: ' + err))
 }
+exports.getSearch = (req, res) => {
+    User.find({ username: { $regex: req.query.username } })
+        .then(users => res.json(users))
+        .catch(err => res.status(400).json('Error: ' + err))
+}
 
 //followers
 exports.getFollowers = (req, res) => {

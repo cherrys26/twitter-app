@@ -25,7 +25,7 @@ export default function Reply() {
             >
                 <button onClick={showReply} className="homeButton" id="replyButton">
                     <motion.span whileHover={{
-                        borderRadius: "10px", backgroundColor: "rgba(0, 0, 250, 0.2)", color: "blue"
+                        borderRadius: "10px", backgroundColor: "rgba(0,191, 255, 0.2)", color: "rgba(0,191, 255, 1)"
                     }}>
                         < AiOutlineMessage />
                     </motion.span>
