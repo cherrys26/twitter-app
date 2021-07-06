@@ -6,7 +6,7 @@ import FormControl from 'react-bootstrap/FormControl'
 import Navbar from 'react-bootstrap/Navbar'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
-
+import "../Sidebar.scss"
 
 export default function Header() {
 
@@ -15,7 +15,7 @@ export default function Header() {
 
     return (
 
-        <Navbar style={{ backgroundColor: "transparent" }}>
+        <Navbar id="nav">
             <Navbar.Brand style={{ textTransform: "capitalize", color: "white" }}><b>{path[1]}</b></Navbar.Brand>
             <Navbar.Toggle />
         </Navbar>

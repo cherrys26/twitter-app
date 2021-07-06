@@ -25,6 +25,8 @@ import OpenTweet from "./sidebar-components/Tweet"
 import Home from "./sidebar-components/Home";
 import Followers from "./sidebar-components/Followers"
 import Following from "./sidebar-components/Following"
+import Popover from 'react-bootstrap/Popover'
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import { AiOutlineHome, AiOutlineBell, AiOutlineUser, AiOutlineClose } from "react-icons/ai";
 import { GiFeather } from "react-icons/gi";
 import { BiSearchAlt, BiSend } from "react-icons/bi";
@@ -85,25 +87,6 @@ const routes = [
 
 ];
 
-function MyVerticallyCenteredModal(props) {
-    return (
-        <Modal
-            {...props}
-            size="s"
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-        >
-            <Modal.Body >
-                <h4>Do you want to log out?</h4>
-            </Modal.Body>
-            <Modal.Footer>
-                <Button onClick={props.onLogout}>Logout</Button>
-                <Button onClick={props.onHide}>Close</Button>
-            </Modal.Footer>
-        </Modal>
-    );
-}
-
 function TweetModal(props) {
 
     let getUser = JSON.parse(localStorage.getItem("username"))
@@ -147,7 +130,7 @@ function TweetModal(props) {
             <Modal.Body style={{ textAlign: "right", padding: 0, backgroundColor: "black" }} >
                 <Row style={{ marginTop: "20px" }}>
                     <Col xs={1} >
-                        <Image src="https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png" style={{ width: "45px", height: "45px" }} roundedCircle />
+                        <Image src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg" style={{ width: "45px", height: "45px" }} roundedCircle />
                     </Col>
                     <Col xs={11} style={{ paddingLeft: "20px" }}>
                         <Form onSubmit={handleSubmit}>
@@ -172,10 +155,19 @@ function TweetModal(props) {
     );
 }
 
-export default function Sidebar(props) {
 
-    const [modalShow, setModalShow] = useState(false);
+export default function Sidebar(props) {
+    const [user, setUser] = useState();
+
     const [tweetShow, setTweetShow] = useState(false);
+    let getUser = JSON.parse(localStorage.getItem("username"))
+
+    const userProfile = axios.get(`${BASE_API_URL}user/${getUser}`);
+
+    useEffect(() => {
+        userProfile.then(data => setUser(data.data)) // eslint-disable-next-line
+    }, [])
+
 
 
     return (
@@ -234,13 +226,67 @@ export default function Sidebar(props) {
                             <Row className="align-items-end">
                                 <Col>
                                     <li>
-                                        <Image src="https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png" style={{ width: "50px", height: "50px" }} onClick={() => setModalShow(true)} roundedCircle />
+                                        <OverlayTrigger
+                                            placement="top"
+                                            trigger="click"
+                                            rootClose={true}
+                                            overlay={(
+                                                <Popover className="popover-main" >
+                                                    {user && user.map(user => {
+                                                        return (
+                                                            <div className="popover-custom-header">
+                                                                <Container>
+                                                                    <Row>
+                                                                        <Col xs={4}>
+                                                                            <Image src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg" style={{ width: "40px", height: "40px" }} roundedCircle />
+                                                                        </Col>
+                                                                        <Col xs={8}>
+                                                                            <Container>
+                                                                                <Col xs={12}>
+                                                                                    {user.name}
+                                                                                </Col>
+                                                                                <Col xs={12}>
+                                                                                    @{user.username}
+                                                                                </Col>
+                                                                            </Container>
+                                                                        </Col>
+                                                                    </Row>
+                                                                </Container>
+                                                                <Button onClick={() => props.history.push('/') & localStorage.removeItem("username") & console.log("logout :(")}>
+                                                                    Logout @{user.username}
+                                                                </Button>
+                                                            </div>
+                                                        )
+                                                    })}
 
-                                        <MyVerticallyCenteredModal
-                                            show={modalShow}
-                                            onHide={() => setModalShow(false)}
-                                            onLogout={() => setModalShow(props.history.push('/') & localStorage.removeItem("username"))}
-                                        />
+                                                </Popover >)}
+                                        >
+                                            <Button className="infoBtn" style={{ backgroundColor: "transparent", border: "transparent" }}>
+                                                {user && user.map(user => {
+                                                    return (
+                                                        <div>
+                                                            <Container>
+                                                                <Row>
+                                                                    <Col xs={4}>
+                                                                        <Image src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg" style={{ width: "50px", height: "50px" }} roundedCircle />
+                                                                    </Col>
+                                                                    <Col xs={8}>
+                                                                        <Container>
+                                                                            <Col xs={12}>
+                                                                                {user.name}
+                                                                            </Col>
+                                                                            <Col xs={12}>
+                                                                                @{user.username}
+                                                                            </Col>
+                                                                        </Container>
+                                                                    </Col>
+                                                                </Row>
+                                                            </Container>
+                                                        </div>
+                                                    )
+                                                })}
+                                            </Button>
+                                        </OverlayTrigger>
                                     </li>
                                 </Col>
                             </Row>
@@ -249,7 +295,7 @@ export default function Sidebar(props) {
                 </Col>
 
 
-                <Col lg={9} sm={11} xs={10} style={{ flex: 1, padding: "10px" }}>
+                <Col lg={9} sm={11} xs={10} style={{ flex: 1, padding: "0 10px" }}>
                     <Switch>
                         {routes.map((route, index) => (
                             <Route

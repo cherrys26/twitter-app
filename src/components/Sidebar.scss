@@ -41,7 +41,6 @@ h5 {
         border-radius: 50px;
         width: 50px;
         height: 50px;
-        
     }
 }
 
@@ -73,4 +72,27 @@ h5 {
 
 .list-ava {
     display: none;
+}
+
+.popover-main {
+    border-radius: 10px;
+    background: #000000;
+    box-shadow: 1px 1px 6px #ffffff33, -1px -1px 6px #ffffff33;
+    border: 1px solid gray;
+}
+
+#editPro:hover {
+    background-color: rgba(255, 20, 145, 0.2) !important;
+}
+#nav {
+    background-color: black;
+    position: sticky;
+    top: 0px;
+    z-index: 1000;
+    border: 1px solid rgba(128, 128, 128, 0.53);
+}
+.search {
+    position: sticky;
+    top: 5px;
+    margin-top: 5px;
 }

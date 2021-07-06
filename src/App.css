@@ -28,6 +28,10 @@
 #likeButton {
   color: grey;
 }
+.searchHome {
+  position: inherit;
+}
+
 @media screen and (max-width: 993px) {
   .searchHome {
     display: none;
@@ -46,4 +50,36 @@
 
 .tweet-button:hover {
   border: 1px solid #d5137c;
+}
+
+.rbt-input-main {
+  border: 1px solid #80808087 !important;
+  border-radius: 1rem !important;
+  background-color: #80808087 !important;
+  color: white !important;
+}
+
+.rbt-input-main:focus {
+  border: 1px solid deeppink !important;
+}
+
+.rbt-menu > .dropdown-item {
+  border: 1px solid #80808087;
+}
+
+.dropdown-menu.show {
+  display: block;
+  background-color: black;
+  min-height: 50%;
+}
+
+.dropdown-item {
+  background-color: black;
+}
+.dropdown-item:hover {
+  background-color: rgb(36, 36, 36);
+}
+
+button:focus {
+  box-shadow: none !important;
 }

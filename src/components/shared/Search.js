@@ -1,19 +1,22 @@
 import React, { useState } from 'react';
 import { Typeahead, AsyncTypeahead } from 'react-bootstrap-typeahead';
+import 'react-bootstrap-typeahead/css/Typeahead.css'
 import { BASE_API_URL } from '../../utils/constants';
 import axios from 'axios';
+import '../../App.css'
 
-export default function AsyncExample() {
+export default function SearchSwitter() {
     const [isLoading, setIsLoading] = useState(false);
     const [options, setOptions] = useState([]);
 
     const handleSearch = (query) => {
-        setIsLoading(true);
+        setIsLoading(false);
 
         axios.get(`${BASE_API_URL}users?username=${query}`)
             .then(({ data }) => {
                 const options = data.map((i) => ({
-                    username: i.username
+                    username: i.username,
+                    name: i.name
                 }));
 
                 setOptions(options);
@@ -22,24 +25,24 @@ export default function AsyncExample() {
 
     };
 
-    // Bypass client-side filtering by returning `true`. Results are already
-    // filtered by the search endpoint, so no need to do it again.
     const filterBy = () => true;
 
     return (
         <AsyncTypeahead
             filterBy={filterBy}
-            id="async-example"
+            id="searchBar"
+            className="searchBar"
             isLoading={isLoading}
             labelKey="username"
             minLength={2}
             onSearch={handleSearch}
             options={options}
-            placeholder="Search for a Github user..."
+            placeholder="Search Switter"
             renderMenuItemChildren={(option, props) => (
-                <div>
-
-                    <span>{option.username}</span>
+                <div >
+                    <span style={{ color: "white" }}>{option.name}</span>
+                    <br />
+                    <span style={{ color: "grey", fontSize: "14px" }}>@{option.username}</span>
                 </div>
             )}
         />
