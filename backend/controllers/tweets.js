@@ -41,6 +41,12 @@ exports.getTweet = (req, res) => {
         .then(user => res.json(user))
         .catch(err => res.status(400).json('Error: ' + err))
 }
+exports.getTweetFollowing = (req, res) => {
+    let username = req.params.username
+    Tweets.find({ username: username })
+        .then(user => res.json(user))
+        .catch(err => res.status(400).json('Error: ' + err))
+}
 
 exports.getTweetById = (req, res) => {
     let _id = req.params.id
@@ -50,5 +56,4 @@ exports.getTweetById = (req, res) => {
 }
 exports.getAllTweets = (req, res) => {
     Tweets.find().then(tweets => res.json(tweets)).catch(err => res.status(400).json('Error: ' + err))
-
 }

@@ -21,8 +21,9 @@ import Tabs from 'react-bootstrap/Tabs'
 import Tab from 'react-bootstrap/Tab'
 
 import moment from 'moment';
+import { motion } from 'framer-motion'
 
-import { AiTwotoneStar, AiOutlineRetweet } from "react-icons/ai";
+import { AiTwotoneStar, AiOutlineRetweet, AiOutlineHeart } from "react-icons/ai";
 
 import Retweet from './Re';
 import Loader from './Loading';
@@ -33,6 +34,12 @@ export default function Tweets() {
 
     const [user, setUser] = useState();
     const [tweets, setTweets] = useState([]);
+    const [tweet1, setTweet1] = useState([]);
+    const [tweet2, setTweet2] = useState([]);
+    const [tweet3, setTweet3] = useState([]);
+    const [tweet4, setTweet4] = useState([]);
+    const [tweet5, setTweet5] = useState([]);
+    const [tweet6, setTweet6] = useState([]);
     const [isLoading, setisLoading] = useState(true);
     const location = useLocation();
 
@@ -42,15 +49,94 @@ export default function Tweets() {
     const userTweets = axios.get(`${BASE_API_URL}tweets/${getUser}`);
 
     useEffect(() => {
-        setTimeout(() => setisLoading(false), 1500);
+        setTimeout(() => setisLoading(false), 3000);
     });
 
     useEffect(() => {
         userProfile.then(data => setUser(data.data)) // eslint-disable-next-line
     }, [])
-    useEffect((tweets) => {
-        userTweets.then(tweetData => setTweets(tweetData.data))
+    useEffect(() => {
+        userTweets.then(tweetData => setTweets(tweetData.data))// eslint-disable-next-line
     }, [])
+
+    useEffect(() => {
+        if (user) {
+
+            axios.get(`${BASE_API_URL}tweets/${user[0].following[0]}`)
+                .then(followData => setTweet1(followData.data))
+        }
+    }, [tweets, setTweet1])
+
+    useEffect(() => {
+        if (user) {
+
+            axios.get(`${BASE_API_URL}tweets/${user[0].following[1]}`)
+                .then(followData => setTweet2(followData.data))
+        }
+    }, [tweets, setTweet2])
+
+    useEffect(() => {
+        if (user) {
+            axios.get(`${BASE_API_URL}tweets/${user[0].following[2]}`)
+                .then(followData => setTweet3(followData.data))
+        }
+    }, [tweets, setTweet3])
+
+    useEffect(() => {
+        if (user) {
+            axios.get(`${BASE_API_URL}tweets/${user[0].following[3]}`)
+                .then(followData => setTweet4(followData.data))
+        }
+    }, [tweets, setTweet4])
+
+    useEffect(() => {
+        if (user) {
+            axios.get(`${BASE_API_URL}tweets/${user[0].following[4]}`)
+                .then(followData => setTweet5(followData.data))
+        }
+    }, [tweets, setTweet5])
+
+    useEffect(() => {
+        if (user) {
+            axios.get(`${BASE_API_URL}tweets/${user[0].following[5]}`)
+                .then(followData => setTweet6(followData.data))
+        }
+    }, [tweets, setTweet6])
+
+    let allTweet = tweets.concat(tweet1, tweet2, tweet3, tweet4, tweet5, tweet6)
+
+    const tweetSort = allTweet.sort((a, b) => {
+        return moment(a.createdAt).diff(b.createdAt)
+    })
+
+    const likeTip = (props) => (
+        <Tooltip id="button-tooltip" {...props}>
+            Like
+        </Tooltip>
+    );
+
+    function getIndex(_id) {
+        return tweets.findIndex(obj => obj._id === _id);
+    }
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        try {
+            const updatedData = {
+                username: getUser,
+            }
+            await axios.post(`${BASE_API_URL}tweets/${getIndex()}`, {
+                ...updatedData
+            })
+        } catch (error) {
+            if (error.response) {
+
+                console.log('error', error.response.data);
+            }
+        };
+        event.target.reset()
+    };
+
 
 
     return (
@@ -58,7 +144,7 @@ export default function Tweets() {
             {isLoading ? <Loader /> :
                 <>
                     {(tweets.length > 0) ?
-                        (tweets && tweets.slice(0).reverse().map(tweets => {
+                        (allTweet && allTweet.slice(0).reverse().map(tweets => {
                             return (
                                 <Card key={tweets._id} style={{ marginBottom: "0.25px", backgroundColor: "black", border: "1px solid #80808087" }}>
                                     <Container style={{ padding: "5px" }}>
@@ -109,7 +195,20 @@ export default function Tweets() {
                                                             <Retweet />
                                                         </Col>
                                                         <Col sm={3}>
-                                                            <Like />
+                                                            <OverlayTrigger
+                                                                placement="bottom"
+                                                                delay={{ show: 600, hide: 200 }}
+                                                                overlay={likeTip}
+                                                            >
+                                                                <Button type="submit" className="homeButton" id="likeButton" onClick={() => console.log(getIndex(tweets._id))}>
+                                                                    <motion.span whileHover={{
+                                                                        borderRadius: "10px", backgroundColor: "rgba(250, 00, 00, 0.2)", color: "rgba(250, 00, 00, 1)"
+                                                                    }}><AiOutlineHeart /></motion.span>
+                                                                </Button>
+
+                                                            </OverlayTrigger >
+
+                                                            {/* <Like /> */}
                                                         </Col>
                                                     </Row>
                                                 </Container>

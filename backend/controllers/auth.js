@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const {
     createJWT,
 } = require("../utils/auth");
+const { db } = require('../models/User');
 exports.signup = (req, res, next) => {
     let { name, username, email, password, bio, followers, following } = req.body;
     let errors = [];
@@ -127,6 +128,18 @@ exports.getUser = (req, res) => {
         .then(user => res.json(user))
         .catch(err => res.status(400).json('Error: ' + err))
 }
+exports.updateUser = (req, res) => {
+    let username = req.params.username;
+    let { bio } = req.body
+    User.updateMany(
+        { username: username },
+        { $set: { bio: bio } }
+
+    )
+        .then(user => res.json(user))
+        .catch(error => res.json(error))
+}
+
 exports.getSearch = (req, res) => {
     User.find({ username: { $regex: req.query.username } })
         .then(users => res.json(users))
@@ -187,4 +200,60 @@ exports.deleteFollowing = (req, res) => {
     )
         .then(following => res.json(following))
         .catch(error => res.json(error))
+}
+
+// likes
+exports.getLikes = (req, res) => {
+    let username = req.params.username
+    User.find({ username: username })
+        .then(user => res.json(user[0].likes))
+        .catch(err => res.status(400).json('Error: ' + err))
+}
+exports.updateLikes = (req, res) => {
+    let username = req.params.username
+    let { like } = req.body
+    User.updateOne(
+        { username: username },
+        { $push: { likes: { like: like } } }
+    )
+        .then(likes => res.json(likes))
+        .catch(error => res.json(error))
+}
+exports.deleteLikes = (req, res) => {
+    let username = req.params.username
+    let { like } = req.body
+    User.updateOne(
+        { username: username },
+        { $pull: { likes: { like: like } } }
+    )
+        .then(likes => res.json(likes))
+        .catch(error => res.json(error))
+}
+
+// test
+
+exports.testJoin = (req, res) => {
+    db.Tweets.create(req.body).then(function (dbTweets) {
+        return User.findOneAndUpdate({ _id: req.params.id }, { tweet: dbTweets._id }, { new: true });
+    })
+        .then(function (User) {
+            res.json(User);
+        })
+        .catch(function (err) {
+            res.json(err);
+        });
+}
+
+exports.testGetJoin = (req, res) => {    // Using the id passed in the id parameter, prepare a query that finds the matching one in our db...
+    User.findOne({ _id: req.params.id })
+        // ..and populate all of the notes associated with it
+        .populate("tweet")
+        .then(function (User) {
+            // If we were able to successfully find an Product with the given id, send it back to the client
+            res.json(User);
+        })
+        .catch(function (err) {
+            // If an error occurred, send it to the client
+            res.json(err);
+        });
 }

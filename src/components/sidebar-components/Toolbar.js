@@ -15,7 +15,7 @@ export default function Header() {
 
     return (
 
-        <Navbar id="nav">
+        <Navbar className="topBar">
             <Navbar.Brand style={{ textTransform: "capitalize", color: "white" }}><b>{path[1]}</b></Navbar.Brand>
             <Navbar.Toggle />
         </Navbar>

@@ -35,7 +35,14 @@ let userSchema = new Schema({
     },
     following: {
         type: [String]
-    }
+    },
+    tweet: {
+        type: [Schema.Types.ObjectId],
+        ref: "Tweets"
+    },
+    likes: [{
+        like: String
+    }]
 }, {
     timestamps: true,
     collection: 'users'

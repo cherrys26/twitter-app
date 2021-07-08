@@ -28,6 +28,8 @@
 #likeButton {
   color: grey;
 }
+
+
 .searchHome {
   position: inherit;
 }
@@ -82,4 +84,5 @@
 
 button:focus {
   box-shadow: none !important;
+  background: transparent;
 }

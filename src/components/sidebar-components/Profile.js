@@ -2,6 +2,7 @@ import React, { useState, useEffect, lazy, Suspense } from 'react';
 import {
     useLocation,
     Link,
+    useHistory
 } from 'react-router-dom'
 import { BASE_API_URL } from '../../utils/constants';
 import axios from 'axios';
@@ -21,11 +22,13 @@ import Tooltip from 'react-bootstrap/Tooltip'
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Tabs from 'react-bootstrap/Tabs'
 import Tab from 'react-bootstrap/Tab'
-import Spinner from 'react-bootstrap/Spinner'
+import Modal from 'react-bootstrap/Modal'
+import Dropdown from 'react-bootstrap/Dropdown'
 
 import moment from 'moment';
 
-import { AiTwotoneStar, AiOutlineRetweet } from "react-icons/ai";
+import { AiTwotoneStar, AiOutlineRetweet, AiOutlineClose } from "react-icons/ai";
+import { BiArrowBack } from "react-icons/bi";
 
 import Retweet from '../shared/Re';
 import Like from '../shared/Like';
@@ -38,17 +41,22 @@ export default function Profile(props) {
 
     const [user, setUser] = useState();
     const [tweets, setTweets] = useState([]);
-    const location = useLocation();
     const [followingUser, setFollowingUser] = useState([]);
     const [followerUser, setFollowerUser] = useState([]);
+    const [isLoading, setisLoading] = useState(true);
+    const [show, setShow] = useState(false);
+    const location = useLocation();
 
     let getUser = JSON.parse(localStorage.getItem("username"))
     let path = location.pathname.split("/")
+    let history = useHistory();
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
     const userFollowing = axios.get(`${BASE_API_URL}following/${getUser}`);
     const userFollowers = axios.get(`${BASE_API_URL}followers/${path[1]}`);
     const userProfile = axios.get(`${BASE_API_URL}user/${path[1]}`);
     const userTweets = axios.get(`${BASE_API_URL}tweets/${path[1]}`);
-    const [isLoading, setisLoading] = useState(true);
 
     const handleUnfollow = async (event) => {
         event.preventDefault();
@@ -130,6 +138,7 @@ export default function Profile(props) {
         </Form>
     )
 
+
     function Foll() {
         return (
             results
@@ -153,13 +162,76 @@ export default function Profile(props) {
         setTimeout(() => setisLoading(false), 1000);
     });
 
-
-
     const renderTooltip = (props) => (
         <Tooltip id="button-tooltip" {...props}>
             Verified User :D
         </Tooltip>
     );
+
+    function UpdateModal(props) {
+
+        let getUser = JSON.parse(localStorage.getItem("username"))
+
+        const [update, setUpdate] = useState('')
+
+        const handleSubmit = async (event) => {
+            event.preventDefault();
+            try {
+                const updatedData = {
+                    username: getUser,
+                    bio: update
+                }
+                await axios.put(`${BASE_API_URL}user/${getUser}`, {
+                    ...updatedData
+                })
+            } catch (error) {
+                if (error.response) {
+                    console.log('error', error.response.data);
+                }
+            };
+        };
+
+        return (
+            <Modal
+                {...props}
+                size="s"
+                aria-labelledby="contained-modal-title-vcenter"
+                centered
+                style={{ backgroundColor: "rgba(250, 250, 250, 0.15" }}
+            >
+                <Modal.Title style={{ backgroundColor: "black", borderBottom: "1px solid rgba(150, 150, 150, 0.5" }} >
+                    <Button style={{ backgroundColor: "transparent", border: "none", color: "darkgray", borderRadius: "50px" }} onClick={props.onHide}>
+                        <AiOutlineClose />
+                    </Button>
+                </Modal.Title>
+                <Modal.Body style={{ textAlign: "right", padding: 0, backgroundColor: "black" }} >
+                    <Row style={{ marginTop: "20px" }}>
+                        <Col xs={2} >
+                            <div>Bio:</div>                        </Col>
+                        <Col xs={10} style={{ paddingLeft: "20px" }}>
+                            <Form onSubmit={handleSubmit}>
+                                <Form.Group controlId="tweet" style={{ display: "block" }}>
+                                    <Form.Control
+                                        as="textarea"
+                                        aria-label="With textarea"
+                                        placeholder="update bio"
+                                        name="update"
+                                        value={update}
+                                        onChange={(e) => setUpdate(e.target.value)}
+                                        style={{ backgroundColor: "black", border: "1px solid gray", color: "white" }} />
+                                </Form.Group>
+                                <Dropdown.Divider style={{ borderTop: "1px solid rgba(150, 150, 150, 0.5" }} />
+                                <Button className="tweet-button" type="submit" >Update </Button>
+                            </Form>
+                        </Col>
+                    </Row>
+
+                </Modal.Body>
+            </Modal>
+        );
+    }
+    const [tweetShow, setTweetShow] = useState(false);
+
 
     return (
         <Container>
@@ -170,9 +242,12 @@ export default function Profile(props) {
                             < Row key={user._id} >
                                 <Col lg={7}>
                                     <Container>
-                                        <Col md={12}>
+                                        <Col md={12} className="topBar">
                                             <Row>
-                                                <Navbar style={{ justifyContent: "space-between", backgroundColor: "transparent" }}>
+                                                <Navbar style={{ backgroundColor: "transparent" }}>
+                                                    <Navbar.Brand>
+                                                        <Button onClick={() => history.goBack()} style={{ backgroundColor: "transparent", border: "transparent", color: "deeppink", fontSize: "20px", verticalAlign: "inherit" }}> <BiArrowBack /></Button>
+                                                    </Navbar.Brand>
                                                     <Navbar.Brand>
                                                         <div style={{ color: "white" }}>
                                                             {user.followers.length > 10 ?
@@ -184,9 +259,7 @@ export default function Profile(props) {
                                                                     ><AiTwotoneStar />
                                                                     </OverlayTrigger></b>)
                                                                 :
-                                                                (<b>{user.name}
-
-                                                                </b>)
+                                                                (<b>{user.name} </b>)
                                                             }
                                                         </div>
                                                         <span style={{ color: "grey", fontSize: "14px" }}>{tweets.length} Tweets</span>
@@ -203,8 +276,14 @@ export default function Profile(props) {
                                                     </Col>
                                                     <Col md={5} style={{ textAlign: "right", marginLeft: "-10px", marginTop: "10px" }}>
                                                         {user.username === JSON.parse(localStorage.getItem('username')) ? (
+                                                            <>
+                                                                <Button id="editPro" onClick={() => setTweetShow(true)} style={{ backgroundColor: "transparent", border: "1px solid deeppink", borderRadius: "20px", color: "deeppink" }}>Edit Profile</Button>
+                                                                <UpdateModal
+                                                                    show={tweetShow}
+                                                                    onHide={() => setTweetShow(false)}
+                                                                    onSubmit={() => setTweetShow(false)} />
+                                                            </>
 
-                                                            <Button id="editPro" style={{ backgroundColor: "transparent", border: "1px solid deeppink", borderRadius: "20px", color: "deeppink" }}>Edit Profile</Button>
                                                         ) : (
                                                             <Foll />
                                                         )
@@ -315,8 +394,11 @@ export default function Profile(props) {
                                         </Col>
                                     </Container>
                                 </Col>
-                                <Col md={4}>
-                                    <Recommend />
+                                <Col md={4} className="searchHome">
+                                    <div className="search">
+
+                                        <Recommend />
+                                    </div>
                                 </Col>
 
                             </Row>)
@@ -329,7 +411,71 @@ export default function Profile(props) {
 
 }
 function Likes() {
+
+    const [likes, setLikes] = useState([]);
+    const [tweet, setTweet] = useState('')
+
+    const location = useLocation();
+    let path = location.pathname.split("/")
+    const userLikes = axios.get(`${BASE_API_URL}likes/${path[1]}`);
+
+    // useEffect(() => {
+    //     tweets.then(tweetData => setTweet(tweetData.data)) // eslint-disable-next-line
+    // }, [])
+
+    let tweets = axios.get(`${BASE_API_URL}tweet/${LikedTweet()}`);
+
+    console.log(tweets)
+
+    useEffect(() => {
+        userLikes.then(liked => setLikes(liked.data)) //eslint-disable-next-line
+    }, []);
+
+    function LikedTweet() {
+        const [likes, setLikes] = useState([]);
+        const [tweet, setTweet] = useState('')
+
+        const location = useLocation();
+        let path = location.pathname.split("/")
+        const userLikes = axios.get(`${BASE_API_URL}likes/${path[1]}`);
+
+        // useEffect(() => {
+        //     tweets.then(tweetData => setTweet(tweetData.data)) // eslint-disable-next-line
+        // }, [])
+
+        // let tweets = axios.get(`${BASE_API_URL}tweet/${path[1]}`);
+
+
+        useEffect(() => {
+            userLikes.then(liked => setLikes(liked.data)) //eslint-disable-next-line
+        }, []);
+
+        return (
+            <>
+                {likes && likes.map((likes) => {
+                    return (
+                        <div key={likes._id}>
+                            {likes.like}
+                        </div>
+                    )
+                })
+                }
+            </>
+        )
+    }
+
+    console.log(LikedTweet)
+
     return (
-        <div>These are liked tweets {`:)`}</div>
+        <div>
+            {likes && likes.map((likes) => {
+                return (
+                    <div key={likes._id}>
+                        {likes.like}
+                    </div>
+                )
+            })}
+            These are liked tweets {`:)`}
+        </div>
     )
 }
