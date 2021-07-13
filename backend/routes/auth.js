@@ -4,10 +4,8 @@ const router = express.Router();
 const { signup, signin, allUsers, getUser, getSearch, updateFollowers, getFollowers, deleteFollowers, getFollowing, updateFollowing, deleteFollowing, getLikes,
     updateLikes,
     deleteLikes,
-    testJoin,
-    testGetJoin,
     updateUser } = require('../controllers/auth');
-const { postTweet, getTweet, getTweetById, getAllTweets } = require('../controllers/tweets')
+const { postTweet, getTweet, getTweetById, getAllTweets, getReply, postReply } = require('../controllers/tweets')
 // Login and signup
 router.post('/signup', signup);
 router.post('/signin', signin);
@@ -33,10 +31,11 @@ router.get("/tweet/:id", getTweetById)
 router.get("/likes/:username", getLikes)
 router.post("/likes/:username", updateLikes)
 router.delete("/likes/:username", deleteLikes)
-// testing
-router.get("/test/:id", testGetJoin)
-router.post("/test/:id", testJoin)
+// replys 
+router.get("/reply/:id", getReply);
+router.post("/reply/:id", postReply);
 
+// testing
 
 
 module.exports = router;

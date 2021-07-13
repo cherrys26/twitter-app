@@ -1,4 +1,4 @@
-import React, { useState, useEffect, lazy, Suspense } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     useLocation,
     Link,
@@ -14,7 +14,6 @@ import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
 import Navbar from 'react-bootstrap/Navbar'
 import Form from 'react-bootstrap/Form'
-import FormControl from 'react-bootstrap/FormControl'
 import Card from 'react-bootstrap/Card'
 import Image from 'react-bootstrap/Image'
 import Button from 'react-bootstrap/Button'
@@ -27,7 +26,7 @@ import Dropdown from 'react-bootstrap/Dropdown'
 
 import moment from 'moment';
 
-import { AiTwotoneStar, AiOutlineRetweet, AiOutlineClose } from "react-icons/ai";
+import { AiTwotoneStar, AiOutlineClose } from "react-icons/ai";
 import { BiArrowBack } from "react-icons/bi";
 
 import Retweet from '../shared/Re';
@@ -250,13 +249,13 @@ export default function Profile(props) {
                                                     </Navbar.Brand>
                                                     <Navbar.Brand>
                                                         <div style={{ color: "white" }}>
-                                                            {user.followers.length > 10 ?
+                                                            {user.followers.length > 9 ?
                                                                 (<b>{user.name}
                                                                     <OverlayTrigger
                                                                         placement="right"
                                                                         delay={{ show: 100, hide: 400 }}
                                                                         overlay={renderTooltip}
-                                                                    ><AiTwotoneStar />
+                                                                    ><AiTwotoneStar style={{ color: "deeppink" }} />
                                                                     </OverlayTrigger></b>)
                                                                 :
                                                                 (<b>{user.name} </b>)
@@ -419,52 +418,9 @@ function Likes() {
     let path = location.pathname.split("/")
     const userLikes = axios.get(`${BASE_API_URL}likes/${path[1]}`);
 
-    // useEffect(() => {
-    //     tweets.then(tweetData => setTweet(tweetData.data)) // eslint-disable-next-line
-    // }, [])
-
-    let tweets = axios.get(`${BASE_API_URL}tweet/${LikedTweet()}`);
-
-    console.log(tweets)
-
     useEffect(() => {
         userLikes.then(liked => setLikes(liked.data)) //eslint-disable-next-line
     }, []);
-
-    function LikedTweet() {
-        const [likes, setLikes] = useState([]);
-        const [tweet, setTweet] = useState('')
-
-        const location = useLocation();
-        let path = location.pathname.split("/")
-        const userLikes = axios.get(`${BASE_API_URL}likes/${path[1]}`);
-
-        // useEffect(() => {
-        //     tweets.then(tweetData => setTweet(tweetData.data)) // eslint-disable-next-line
-        // }, [])
-
-        // let tweets = axios.get(`${BASE_API_URL}tweet/${path[1]}`);
-
-
-        useEffect(() => {
-            userLikes.then(liked => setLikes(liked.data)) //eslint-disable-next-line
-        }, []);
-
-        return (
-            <>
-                {likes && likes.map((likes) => {
-                    return (
-                        <div key={likes._id}>
-                            {likes.like}
-                        </div>
-                    )
-                })
-                }
-            </>
-        )
-    }
-
-    console.log(LikedTweet)
 
     return (
         <div>
@@ -479,3 +435,4 @@ function Likes() {
         </div>
     )
 }
+

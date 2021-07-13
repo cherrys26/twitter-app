@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import { AiOutlineRetweet } from "react-icons/ai";
 import Tooltip from 'react-bootstrap/Tooltip';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
 import { motion } from 'framer-motion'
 export default function Retweet() {
     const retweetTip = (props) => (

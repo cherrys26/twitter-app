@@ -57,3 +57,21 @@ exports.getTweetById = (req, res) => {
 exports.getAllTweets = (req, res) => {
     Tweets.find().then(tweets => res.json(tweets)).catch(err => res.status(400).json('Error: ' + err))
 }
+
+//replys    
+exports.getReply = (req, res) => {
+    let _id = req.params.id
+    Tweets.findById({ _id })
+        .then(tweet => res.json(tweet.replys))
+        .catch(err => res.status(400).json('Error: ' + err))
+}
+exports.postReply = (req, res) => {
+    let _id = req.params.id
+    let { reply, username } = req.body
+    Tweets.updateOne(
+        { _id: _id },
+        { $push: { replys: { username: username, reply: reply } } }
+    )
+        .then(likes => res.json(likes))
+        .catch(error => res.json(error))
+}

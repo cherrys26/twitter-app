@@ -2,10 +2,7 @@ import React from 'react';
 import {
     useLocation
 } from 'react-router-dom'
-import FormControl from 'react-bootstrap/FormControl'
 import Navbar from 'react-bootstrap/Navbar'
-import Button from 'react-bootstrap/Button'
-import Form from 'react-bootstrap/Form'
 import "../Sidebar.scss"
 
 export default function Header() {

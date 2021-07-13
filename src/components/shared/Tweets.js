@@ -1,4 +1,4 @@
-import React, { useState, useEffect, lazy, Suspense } from 'react';
+import React, { useState, useEffect, } from 'react';
 import {
     useLocation,
     Link,
@@ -9,26 +9,18 @@ import axios from 'axios';
 import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
-import Navbar from 'react-bootstrap/Navbar'
-import Form from 'react-bootstrap/Form'
-import FormControl from 'react-bootstrap/FormControl'
 import Card from 'react-bootstrap/Card'
 import Image from 'react-bootstrap/Image'
-import Button from 'react-bootstrap/Button'
 import Tooltip from 'react-bootstrap/Tooltip'
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
-import Tabs from 'react-bootstrap/Tabs'
-import Tab from 'react-bootstrap/Tab'
 
 import moment from 'moment';
 import { motion } from 'framer-motion'
 
-import { AiTwotoneStar, AiOutlineRetweet, AiOutlineHeart } from "react-icons/ai";
+import { AiOutlineRetweet, AiOutlineHeart, AiOutlineMessage } from "react-icons/ai";
 
 import Retweet from './Re';
 import Loader from './Loading';
-import Like from './Like';
-import Reply from './Reply';
 
 export default function Tweets() {
 
@@ -44,7 +36,6 @@ export default function Tweets() {
     const location = useLocation();
 
     let getUser = JSON.parse(localStorage.getItem("username"))
-    let path = location.pathname.split("/")
     const userProfile = axios.get(`${BASE_API_URL}user/${getUser}`);
     const userTweets = axios.get(`${BASE_API_URL}tweets/${getUser}`);
 
@@ -137,7 +128,41 @@ export default function Tweets() {
         event.target.reset()
     };
 
+    const replyTip = (props) => (
+        <Tooltip id="button-tooltip" {...props}>
+            Reply
+        </Tooltip>
+    );
 
+    const [show, setShow] = useState(false)
+    const showReply = () => setShow(true)
+    const hideReply = () => setShow(false)
+
+    // function ReplyTweet(_id) {
+
+    const [tweet, setTweet] = useState({});
+
+    let handleOpenTweet = async ({ id }) => {
+        try {
+            await axios.get(`${BASE_API_URL}tweet/${id}`);
+            console.log("working")
+        } catch (error) {
+            if (error.response) {
+                console.log('Error', error.response.data)
+            }
+        }
+    }
+
+    //     return (
+    //         <div>
+    //             {tweet && tweet.map((tweet) => {
+    //                 <div>
+    //                     {tweet.tweet}
+    //                 </div>
+    //             })}
+    //         </div>
+    //     )
+    // }
 
     return (
         <>
@@ -189,7 +214,35 @@ export default function Tweets() {
                                                     </Row>
                                                     <Row>
                                                         <Col sm={{ span: 3 }}>
-                                                            <Reply />
+                                                            <OverlayTrigger
+                                                                placement="bottom"
+                                                                delay={{ show: 600, hide: 200 }}
+                                                                overlay={replyTip}
+                                                            >
+                                                                <button onClick={() => handleOpenTweet(tweets._id)} className="homeButton" id="replyButton">
+                                                                    <motion.span whileHover={{
+                                                                        borderRadius: "10px", backgroundColor: "rgba(0,191, 255, 0.2)", color: "rgba(0,191, 255, 1)"
+                                                                    }}>
+                                                                        < AiOutlineMessage />
+                                                                    </motion.span>
+                                                                </button>
+
+                                                            </OverlayTrigger >
+                                                            {/* <Modal show={show} onHide={hideReply}>
+                                                                <Modal.Body>
+                                                                    <Form>
+                                                                        <Form.Control as="textarea" rows={3} />
+                                                                    </Form>
+                                                                </Modal.Body>
+                                                                <Modal.Footer>
+                                                                    <Button variant="secondary" onClick={hideReply}>
+                                                                        Cancel
+                                                                    </Button>
+                                                                    <Button variant="primary" onClick={hideReply}>
+                                                                        Reply
+                                                                    </Button>
+                                                                </Modal.Footer>
+                                                            </Modal> */}
                                                         </Col>
                                                         <Col sm={3}>
                                                             <Retweet />
@@ -200,11 +253,11 @@ export default function Tweets() {
                                                                 delay={{ show: 600, hide: 200 }}
                                                                 overlay={likeTip}
                                                             >
-                                                                <Button type="submit" className="homeButton" id="likeButton" onClick={() => console.log(getIndex(tweets._id))}>
+                                                                <button type="submit" className="homeButton" id="likeButton" onClick={() => console.log((tweets._id))}>
                                                                     <motion.span whileHover={{
                                                                         borderRadius: "10px", backgroundColor: "rgba(250, 00, 00, 0.2)", color: "rgba(250, 00, 00, 1)"
                                                                     }}><AiOutlineHeart /></motion.span>
-                                                                </Button>
+                                                                </button>
 
                                                             </OverlayTrigger >
 

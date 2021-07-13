@@ -5,6 +5,7 @@ require('dotenv').config();
 
 const authRoutes = require('./routes/auth');
 const { user } = require('./models/User')
+const { Messages } = require('./models/Messages')
 const { tweet } = require('./models/Tweets');
 
 const app = express();

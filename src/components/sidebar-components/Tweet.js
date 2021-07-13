@@ -9,6 +9,7 @@ import { Col, Container, Row } from 'react-bootstrap';
 import Image from 'react-bootstrap/Image';
 import Navbar from 'react-bootstrap/Navbar';
 import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 
 import { BiArrowBack } from 'react-icons/bi'
 
@@ -23,12 +24,42 @@ export default function OpenTweet() {
     let location = useLocation()
     let path = location.pathname.split("/")
     let history = useHistory();
+    let getUser = JSON.parse(localStorage.getItem("username"))
 
     const [tweet, setTweet] = useState('')
+    const [replys, setReplys] = useState('')
+    const [reply, setReply] = useState('')
     const [user, setUser] = useState('')
+
+    let tweets = axios.get(`${BASE_API_URL}tweet/${path[2]}`);
+    let replysGet = axios.get(`${BASE_API_URL}reply/${path[2]}`);
+    let users = axios.get(`${BASE_API_URL}user/${path[1]}`);
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        try {
+            const updatedData = {
+                username: getUser,
+                reply: reply
+            }
+            await axios.post(`${BASE_API_URL}reply/${path[2]}`, {
+                ...updatedData
+            })
+        } catch (error) {
+            if (error.response) {
+
+                console.log('error', error.response.data);
+            }
+        };
+        event.target.reset()
+    };
 
     useEffect(() => {
         tweets.then(tweetData => setTweet(tweetData.data)) // eslint-disable-next-line
+    }, [])
+
+    useEffect(() => {
+        replysGet.then(replyData => setReplys(replyData.data)) // eslint-disable-next-line
     }, [])
 
     useEffect(() => {
@@ -36,8 +67,6 @@ export default function OpenTweet() {
     }, [])
 
 
-    let tweets = axios.get(`${BASE_API_URL}tweet/${path[2]}`);
-    let users = axios.get(`${BASE_API_URL}user/${path[1]}`)
     return (
         <Container>
             <Row>
@@ -107,7 +136,65 @@ export default function OpenTweet() {
                                 </Col>
                             </Row>
                         </Container>
+                        <Form onSubmit={handleSubmit}>
+                            <Form.Group controlId="tweet" style={{ display: "block" }}>
+                                <Form.Control
+                                    as="textarea"
+                                    aria-label="With textarea"
+                                    placeholder="What's up?"
+                                    name="tweet"
+                                    value={reply}
+                                    onChange={(e) => setReply(e.target.value)}
+                                    style={{ backgroundColor: "black", height: "80px", border: "0px", color: "white" }} />
+                            </Form.Group>
+                            <Button className="tweet-button" type="submit" >Reply </Button>
+                        </Form>
                     </Card>
+                    {replys && replys.slice(0).reverse().map((reply) => {
+                        return (
+                            <Card key={reply._id} style={{ marginBottom: "0.25px", backgroundColor: "black", border: "1px solid #80808087" }}>
+                                <Container style={{ padding: "5px" }}>
+                                    <Row>
+                                        <Col xs={2} style={{ paddingLeft: "5%" }}>
+                                            <Link to={`/${reply.username}`} >
+                                                <Image src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg" style={{ width: "45px", height: "45px" }} roundedCircle />
+                                            </Link>
+                                        </Col>
+                                        <Col xs={10} >
+                                            <Container>
+                                                <Row>
+                                                    <Row>
+                                                        <Col xs={{ span: 11 }} style={{ padding: "0px", textAlign: "left" }}>
+                                                            <span style={{ color: "grey", fontSize: "15x", paddingLeft: "6px" }}>
+                                                                @{reply.username}
+                                                            </span>
+                                                        </Col>
+                                                    </Row>
+                                                    <Row>
+                                                        <Col xs={{ span: 10 }} style={{ textAlign: "left", padding: "0" }}>
+                                                            <div style={{ paddingBottom: "10px", color: "white" }}>{reply.reply}</div>
+                                                        </Col>
+                                                    </Row>
+
+                                                </Row>
+                                                <Row>
+                                                    <Col sm={{ span: 3 }}>
+                                                        <Reply />
+                                                    </Col>
+                                                    <Col sm={3}>
+                                                        <Retweet />
+                                                    </Col>
+                                                    <Col sm={3}>
+                                                        <Like />
+                                                    </Col>
+                                                </Row>
+                                            </Container>
+                                        </Col>
+                                    </Row>
+                                </Container>
+                            </Card>
+                        )
+                    })}
                 </Col>
                 <Col md={4} className="searchHome">
                     <div className="search">

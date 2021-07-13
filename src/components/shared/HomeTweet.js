@@ -7,8 +7,7 @@ import '../../App.css'
 import Button from 'react-bootstrap/button'
 import Image from 'react-bootstrap/Image'
 import Form from 'react-bootstrap/Form';
-import { Col, Container, Row } from 'react-bootstrap';
-import Tooltip from 'react-bootstrap/Tooltip'
+import { Col, Row } from 'react-bootstrap';
 
 export default function TweetBox(props) {
     let getUser = JSON.parse(localStorage.getItem("username"))

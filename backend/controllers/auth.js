@@ -4,7 +4,6 @@ const bcrypt = require('bcrypt');
 const {
     createJWT,
 } = require("../utils/auth");
-const { db } = require('../models/User');
 exports.signup = (req, res, next) => {
     let { name, username, email, password, bio, followers, following } = req.body;
     let errors = [];
@@ -131,6 +130,11 @@ exports.getUser = (req, res) => {
 exports.updateUser = (req, res) => {
     let username = req.params.username;
     let { bio } = req.body
+    let errors = [];
+    if (!bio) {
+        errors.push({ bio: "required" });
+    }
+
     User.updateMany(
         { username: username },
         { $set: { bio: bio } }
@@ -231,29 +235,3 @@ exports.deleteLikes = (req, res) => {
 }
 
 // test
-
-exports.testJoin = (req, res) => {
-    db.Tweets.create(req.body).then(function (dbTweets) {
-        return User.findOneAndUpdate({ _id: req.params.id }, { tweet: dbTweets._id }, { new: true });
-    })
-        .then(function (User) {
-            res.json(User);
-        })
-        .catch(function (err) {
-            res.json(err);
-        });
-}
-
-exports.testGetJoin = (req, res) => {    // Using the id passed in the id parameter, prepare a query that finds the matching one in our db...
-    User.findOne({ _id: req.params.id })
-        // ..and populate all of the notes associated with it
-        .populate("tweet")
-        .then(function (User) {
-            // If we were able to successfully find an Product with the given id, send it back to the client
-            res.json(User);
-        })
-        .catch(function (err) {
-            // If an error occurred, send it to the client
-            res.json(err);
-        });
-}

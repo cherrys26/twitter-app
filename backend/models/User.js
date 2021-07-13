@@ -8,7 +8,11 @@ let userSchema = new Schema({
     username: {
         type: String,
         required: true,
-        trim: true
+        validate(value) {
+            if (!value.match(/^\S*$/)) {
+                throw new Error('Email is not valid.');
+            }
+        },
     },
     email: {
         type: String,
@@ -24,7 +28,13 @@ let userSchema = new Schema({
     password: {
         type: String,
         required: true,
-        minlength: 6
+        minlength: 6,
+        validate(value) {
+            if (!value.match(/^\S*$/)) {
+                throw new Error('Email is not valid.');
+            }
+        },
+
     },
     bio: {
         type: String,

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Typeahead, AsyncTypeahead } from 'react-bootstrap-typeahead';
+import { AsyncTypeahead } from 'react-bootstrap-typeahead';
+import { Link } from 'react-router-dom'
 import 'react-bootstrap-typeahead/css/Typeahead.css'
 import { BASE_API_URL } from '../../utils/constants';
 import axios from 'axios';
@@ -39,11 +40,13 @@ export default function SearchSwitter() {
             options={options}
             placeholder="Search Switter"
             renderMenuItemChildren={(option, props) => (
-                <div >
-                    <span style={{ color: "white" }}>{option.name}</span>
-                    <br />
-                    <span style={{ color: "grey", fontSize: "14px" }}>@{option.username}</span>
-                </div>
+                <Link to={option.username}>
+                    <div >
+                        <span style={{ color: "white" }}>{option.name}</span>
+                        <br />
+                        <span style={{ color: "grey", fontSize: "14px" }}>@{option.username}</span>
+                    </div>
+                </Link>
             )}
         />
     );

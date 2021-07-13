@@ -71,7 +71,7 @@ function Login(props) {
                             )}
                         </Form.Group>
                         <br />
-                        <motion.div whileHover={{ scale: 1.05 }} style={{textAlign: "center"}}>
+                        <motion.div whileHover={{ scale: 1.05 }} style={{ textAlign: "center" }}>
                             <Button variant="primary" type="submit" {...toHomepage}>
                                 Login
                             </Button>
@@ -81,7 +81,7 @@ function Login(props) {
                 <div>
 
                     <Route>
-                        <p>Dont have an account? <Link to="/signup">Signup</Link></p>
+                        <p style={{ textAlign: "center" }}>Dont have an account? <Link to="/signup">Signup</Link></p>
                     </Route>
                 </div>
             </div>

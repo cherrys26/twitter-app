@@ -2,10 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { BASE_API_URL } from "../../utils/constants"
 
-import Form from 'react-bootstrap/Form';
 import Card from 'react-bootstrap/Card';
 import Image from 'react-bootstrap/Image';
-import ListGroup from 'react-bootstrap/ListGroup';
 import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
@@ -29,7 +27,6 @@ export default function Recommend() {
         setTimeout(() => setisLoading(false), 4500);
     });
 
-    let getUser = JSON.parse(localStorage.getItem("username"))
 
     if (user) {
         var randomUser1 = user[Math.floor(Math.random() * user.length)];
