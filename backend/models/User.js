@@ -52,11 +52,25 @@ let userSchema = new Schema({
     },
     likes: [{
         like: String
-    }]
+    }],
+    // messages: [{
+    // type: Schema.Types.ObjectId, ref: "Messages"
+    // }]
 }, {
     timestamps: true,
     collection: 'users'
 })
 
+// let messageSchema = new Schema({
+//     user: { type: Schema.Types.ObjectId, ref: "User" },
+//     message: String
+// }, {
+//     timestamps: true,
+//     collection: "messages"
+// });
+
+// const Messages = mongoose.model("Messages", messageSchema);
 const User = mongoose.model('User', userSchema);
+
+// module.exports = Messages;
 module.exports = User;

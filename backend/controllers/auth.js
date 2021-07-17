@@ -235,3 +235,11 @@ exports.deleteLikes = (req, res) => {
 }
 
 // test
+// exports.getMessages = (req, res) => {
+//     let username = req.params.username
+//     User.findOne({
+//         username: username
+//     }).populate('messages')
+//         .then(user => res.json(user.messages)).catch(error => res.json(error))
+
+// }

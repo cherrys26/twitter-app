@@ -60,6 +60,10 @@ const routes = [
         main: () => <Messages />
     },
     {
+        path: "/messages/:id",
+        main: () => <Messages />
+    },
+    {
         path: `/${GetUser()}`,
         exact: true,
         main: () => <Profile />
