@@ -6,22 +6,21 @@ exports.getAllMessages = (req, res) => {
     Messages.find().then(messages => res.json(messages)).catch(err => res.status(400).json('Error: ' + err))
 }
 
-exports.updateMessage = (req, res, next) => {
-    let user = req.params.user
-    let { users } = req.body;
+exports.updateMessages = (req, res, next) => {
+    let { userFrom, userTo } = req.body;
     let errors = [];
-    Messages.findOne({ user: user })
+    Messages.find({ $and: [{ userFrom: userFrom, userTo: userTo }] })
         .then(users1 => {
             if (users1) {
-                return res.status(422).json({ errors: [{ users1: "username already exists" }] });
+                return res.status(422).json({ errors: [{ users1: "Message already exists" }] });
             } else {
                 const users1 = new Messages({
-                    userFrom: [{
-                        users: user
-                    }],
-                    userTo: [{
-                        users: users
-                    }]
+                    userFrom: {
+                        users: userFrom
+                    },
+                    userTo: {
+                        users: userTo
+                    }
                 });
                 users1.save()
                     .then(response => {
@@ -49,6 +48,12 @@ exports.getMessages = (req, res) => {
         .then(user => res.json(user))
         .catch(error => res.json(error))
 }
+exports.getMessageByUser = (req, res) => {
+    let user = req.params.user
+    Messages.find({ $or: [{ 'userFrom.users': user }, { 'userTo.users': user }] })
+        .then(users => res.json(users))
+        .catch(error => res.json(error))
+}
 
 exports.postMessage = (req, res) => {
     let users = req.params.users
@@ -61,23 +66,26 @@ exports.postMessage = (req, res) => {
         .then(message => res.json(message))
         .catch(error => res.json(error))
 }
-exports.messUp = (req, res) => {
-    let _id = req.params.id;
-    let { users, message, user } = req.body;
-    Messages.updateOne(
-        { _id, users: users },
-        { $push: { messages: { message: message } } },
-        { $push: { messages: { user: user } } }
+
+exports.userFromPost = (req, res) => {
+    let _id = req.params.id
+    let { users, message } = req.body
+    Messages.findOneAndUpdate(
+        { _id: _id, 'userFrom.users': users },
+        { $push: { 'userFrom.messages': { message: message, user: users } } }
+
     )
-        .then(likes => res.json(likes))
+        .then(user => res.json(user))
         .catch(error => res.json(error))
 }
-exports.getMess = (req, res) => {
-    let users = req.params.users;
-    // let { users } = req.body;
-    Messages.find(
-        { userTo: { users: users } },
+exports.userToPost = (req, res) => {
+    let _id = req.params.id
+    let { users, message } = req.body
+    Messages.findOneAndUpdate(
+        { _id: _id, 'userTo.users': users },
+        { $push: { 'userTo.messages': { message: message, user: users } } }
+
     )
-        .then(likes => res.json(likes))
+        .then(user => res.json(user))
         .catch(error => res.json(error))
 }

@@ -18,10 +18,14 @@ import Navbar from 'react-bootstrap/Navbar'
 import Form from "react-bootstrap/Form";
 import Image from "react-bootstrap/Image";
 
+import moment from 'moment';
+
 import { Typeahead } from 'react-bootstrap-typeahead';
 import 'react-bootstrap-typeahead/css/Typeahead.css'
 
 import { BiMessageAdd, BiSend } from 'react-icons/bi'
+
+import Loader from '../shared/Loading';
 
 import '../Sidebar.scss'
 
@@ -33,6 +37,9 @@ export default function Messages() {
     const [following, setGetFollowing] = useState([]);
     const [getId, setGetId] = useState('');
     const [mess, setMess] = useState('');
+    const [messageByUser, setMessageByUser] = useState([]);
+    const [messageById, setMessageById] = useState('');
+    const [isLoading, setisLoading] = useState(true);
 
     const handleOpen = () => setOpen(true)
     const handleClose = () => setOpen(false)
@@ -41,6 +48,21 @@ export default function Messages() {
     let path = location.pathname.split("/")
 
     const options = axios.get(`${BASE_API_URL}following/${getUser}`)
+    const getMessageByUser = axios.get(`${BASE_API_URL}message/${getUser}`)
+    const getMessageById = axios.get(`${BASE_API_URL}messages/${path[2]}`)
+
+    useEffect(() => {
+        setTimeout(() => setisLoading(false), 3000);
+    });
+
+    useEffect(() => {
+        getMessageByUser.then(data => setMessageByUser(data.data))
+    }, []) //eslint-disable-line
+
+    useEffect(() => {
+        getMessageById.then(data => setMessageById(data.data))
+    }, [path[2]]) //eslint-disable-line
+
 
     useEffect(() => {
         options.then(data => setGetFollowing(data.data))
@@ -102,7 +124,10 @@ export default function Messages() {
 
     ]
 
-    let messId = message1[path[2]]
+    // let messId = message1[path[2]]
+
+    // console.log(messId)
+    console.log(messageById)
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -157,10 +182,9 @@ export default function Messages() {
                                 />
                             </Form.Group>
                             <div>
-
                                 <CardColumns>
-                                    {message1 && message1.map((messager1, idx) => (
-                                        <Link to={`/messages/${messager1.id}`} style={{ textDecoration: 'none', color: "white" }}>
+                                    {messageByUser && messageByUser.map((messager1, idx) => (
+                                        <Link to={`/messages/${messager1._id}`} style={{ textDecoration: 'none', color: "white" }}>
                                             <Card style={{ marginBottom: "0.25px", backgroundColor: "black", border: "1px solid #80808087" }}>
                                                 <Container style={{ padding: "5px" }}>
                                                     <Row>
@@ -171,28 +195,28 @@ export default function Messages() {
                                                             <Container>
                                                                 <Row>
                                                                     <div>
-                                                                        {message1[idx].userFrom.user === getUser ?
+                                                                        {messageByUser[idx].userFrom.users === getUser ?
                                                                             (<div>
-                                                                                @{message1[idx].userTo.user}
+                                                                                @{messageByUser[idx].userTo.users}
                                                                             </div>)
                                                                             :
                                                                             (<div>
-                                                                                @{message1[idx].userFrom.user}
+                                                                                @{messageByUser[idx].userFrom.users}
                                                                             </div>)}
                                                                     </div>
                                                                 </Row>
                                                                 <Row>
-                                                                    {message1[idx].userFrom.messages.concat(message1[idx].userTo.messages)[message1[idx].userFrom.messages.concat(message1[idx].userTo.messages).length - 1].user === getUser ?
+                                                                    {messageByUser[idx].userFrom.messages.concat(messageByUser[idx].userTo.messages)[messageByUser[idx].userFrom.messages.concat(messageByUser[idx].userTo.messages).length - 1].user === getUser ?
                                                                         (
                                                                             <div style={{ color: "gray", fontSize: "14px" }}>
                                                                                 {`you: `}
-                                                                                {message1[idx].userFrom.messages.concat(message1[idx].userTo.messages)[message1[idx].userFrom.messages.concat(message1[idx].userTo.messages).length - 1].message}
+                                                                                {messageByUser[idx].userFrom.messages.concat(messageByUser[idx].userTo.messages)[messageByUser[idx].userFrom.messages.concat(messageByUser[idx].userTo.messages).length - 1].message}
                                                                             </div>
                                                                         )
                                                                         :
                                                                         (
                                                                             <div style={{ color: "gray", fontSize: "14px" }}>
-                                                                                {message1[idx].userFrom.messages.concat(message1[idx].userTo.messages)[message1[idx].userFrom.messages.concat(message1[idx].userTo.messages).length - 1].message}
+                                                                                {messageByUser[idx].userFrom.messages.concat(messageByUser[idx].userTo.messages)[messageByUser[idx].userFrom.messages.concat(messageByUser[idx].userTo.messages).length - 1].message}
                                                                             </div>
 
                                                                         )}
@@ -235,100 +259,116 @@ export default function Messages() {
                                 </Modal>
                             </>
                         ) : (<>
-                            <Navbar className="topBar" >
-                                <Navbar.Brand style={{ textTransform: "capitalize", color: "white" }}>
-                                    <div>
-                                        {messId.userFrom.user === getUser ? (
-                                            <>
-                                                <b>@{messId.userTo.user}</b>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <b>@{messId.userFrom.user}</b>
-                                            </>
-                                        )}
-                                    </div>
-                                </Navbar.Brand>
-                                <Navbar.Toggle />
-                            </Navbar>
-                            <div style={{ height: "90vh" }}>
-                                <div style={{ height: "85vh" }}>
-                                    {messId.userFrom.messages.concat(messId.userTo.messages).map((message, idx) => (
-                                        < div >
-                                            {
-                                                message.user !== getUser ? (
-                                                    <Container>
-                                                        <Row>
-                                                            <Col xs={2} style={{ paddingRight: "0" }}>
-                                                                <Image src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg" style={{ width: "45px", height: "45px" }} roundedCircle />
-                                                            </Col>
-                                                            <Col style={{
-                                                                padding: "0",
-                                                            }}>
-                                                                <Card style={{ maxWidth: "70%", backgroundColor: "gray", textAlign: "center", width: "fit-content" }} className="mt-1">
-                                                                    <Card.Text style={{ width: "fit-content", alignSelf: "center", padding: "3px 10px" }}>
-                                                                        {message.message}
-                                                                    </Card.Text>
-                                                                </Card>
-                                                            </Col>
-                                                        </Row>
-                                                        <Row>
-                                                            <Col xs={{ offset: 2 }} style={{ padding: 0, color: "grey", fontSize: "14px" }}>
-                                                                {message.time}
-                                                            </Col>
-                                                        </Row>
-                                                    </Container>
+                            {isLoading ? <Loader /> :
+                                <>
+                                    <Navbar className="topBar" >
+                                        <Navbar.Brand style={{ textTransform: "capitalize", color: "white" }}>
+                                            <div>
+                                                {messageById.userFrom.users === getUser ? (
+                                                    <>
+                                                        <b>@{messageById.userTo.users}</b>
+                                                    </>
                                                 ) : (
-                                                    <Container>
-                                                        <Row style={{ textAlign: "-webkit-right" }}>
-                                                            <Col xs={{ offset: 3 }} style={{
-                                                                padding: "0"
-                                                            }}>
-                                                                <Card style={{ maxWidth: "70%", backgroundColor: "deeppink", textAlign: "center", width: "fit-content" }} className="mt-1">
-                                                                    <Card.Text style={{ alignSelf: "center", width: "fit-content", padding: "3px 10px" }}>
-                                                                        {message.message}
-                                                                    </Card.Text>
-                                                                </Card>
-                                                            </Col>
-                                                        </Row>
-                                                        <Row>
-                                                            <Col style={{ padding: 0, color: "grey", fontSize: "14px", textAlign: "-webkit-right", paddingRight: "25px" }}>
-                                                                {message.time}
-                                                            </Col>
-                                                        </Row>
-                                                    </Container>
-                                                )
-                                            }
+                                                    <>
+                                                        <b>@{messageById.userFrom.users}</b>
+                                                    </>
+                                                )}
+                                            </div>
+                                        </Navbar.Brand>
+                                        <Navbar.Toggle />
+                                    </Navbar>
+                                    <div style={{ height: "90vh" }}>
+                                        <div style={{ height: "85vh" }}>
+                                            {console.log(messageById.userFrom.messages.concat(messageById.userTo.messages).sort((a, b) => {
+                                                return moment(a.createdAt).diff(b.createdAt)
+                                            }))}
+
+                                            {messageById.userFrom.messages.concat(messageById.userTo.messages).sort((a, b) => {
+                                                return moment(a.createdAt).diff(b.createdAt)
+                                            }).map((message, idx) => (
+                                                < div >
+                                                    {
+                                                        message.user !== getUser ? (
+                                                            <Container>
+                                                                <Row>
+                                                                    <Col xs={2} style={{ paddingRight: "0" }}>
+                                                                        <Image src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg" style={{ width: "45px", height: "45px" }} roundedCircle />
+                                                                    </Col>
+                                                                    <Col style={{
+                                                                        padding: "0",
+                                                                    }}>
+                                                                        <Card style={{ maxWidth: "70%", backgroundColor: "gray", textAlign: "center", width: "fit-content" }} className="mt-1">
+                                                                            <Card.Text style={{ width: "fit-content", alignSelf: "center", padding: "3px 10px" }}>
+                                                                                {message.message}
+                                                                            </Card.Text>
+                                                                        </Card>
+                                                                    </Col>
+                                                                </Row>
+                                                                <Row>
+                                                                    <Col xs={{ offset: 2 }} style={{ padding: 0, color: "grey", fontSize: "14px" }}>
+                                                                        {moment(`${message.createdAt}`).format("LL") === moment().format("LL") ?
+                                                                            (<span>{moment(`${message.createdAt}`).fromNow()}</span>)
+                                                                            :
+                                                                            (<span>{moment(`${message.createdAt}`).format("LL")}</span>)
+                                                                        }
+                                                                    </Col>
+                                                                </Row>
+                                                            </Container>
+                                                        ) : (
+                                                            <Container>
+                                                                <Row style={{ textAlign: "-webkit-right" }}>
+                                                                    <Col xs={{ offset: 3 }} style={{
+                                                                        padding: "0"
+                                                                    }}>
+                                                                        <Card style={{ maxWidth: "70%", backgroundColor: "deeppink", textAlign: "center", width: "fit-content" }} className="mt-1">
+                                                                            <Card.Text style={{ alignSelf: "center", width: "fit-content", padding: "3px 10px" }}>
+                                                                                {message.message}
+                                                                            </Card.Text>
+                                                                        </Card>
+                                                                    </Col>
+                                                                </Row>
+                                                                <Row>
+                                                                    <Col style={{ padding: 0, color: "grey", fontSize: "14px", textAlign: "-webkit-right", paddingRight: "25px" }}>
+                                                                        {moment(`${message.createdAt}`).format("LL") === moment().format("LL") ?
+                                                                            (<span>{moment(`${message.createdAt}`).format("lll")}</span>)
+                                                                            :
+                                                                            (<span>{moment(`${message.createdAt}`).format("lll")}</span>)
+                                                                        }
+                                                                    </Col>
+                                                                </Row>
+                                                            </Container>
+                                                        )
+                                                    }
+                                                </div>
+                                            ))}
                                         </div>
-                                    ))}
-                                </div>
-                                <Form onSubmit={handleSubmit}>
-                                    <Form.Group style={{ display: "inline" }}>
-                                        <Form.Control
-                                            as="textarea"
-                                            aria-label="With textarea"
-                                            placeholder="What's up?"
-                                            style={{
-                                                backgroundColor: "gray",
-                                                border: "1px solid darkgray",
-                                                color: "white",
-                                                borderRadius: "50px",
-                                                height: "15px",
-                                                width: "90%",
-                                                display: "inline"
-                                            }} />
-                                    </Form.Group>
-                                    <Button type="submit" style={{
-                                        background: "none",
-                                        border: "none",
-                                        fontSize: "x-large",
-                                        color: "deeppink",
-                                        verticalAlign: "top",
-                                        padding: "0 0 0 10px"
-                                    }}><BiSend /> </Button>
-                                </Form>
-                            </div>
-                        </>)}
+                                        <Form onSubmit={handleSubmit}>
+                                            <Form.Group style={{ display: "inline" }}>
+                                                <Form.Control
+                                                    as="textarea"
+                                                    aria-label="With textarea"
+                                                    placeholder="What's up?"
+                                                    style={{
+                                                        backgroundColor: "gray",
+                                                        border: "1px solid darkgray",
+                                                        color: "white",
+                                                        borderRadius: "50px",
+                                                        height: "15px",
+                                                        width: "90%",
+                                                        display: "inline"
+                                                    }} />
+                                            </Form.Group>
+                                            <Button type="submit" style={{
+                                                background: "none",
+                                                border: "none",
+                                                fontSize: "x-large",
+                                                color: "deeppink",
+                                                verticalAlign: "top",
+                                                padding: "0 0 0 10px"
+                                            }}><BiSend /> </Button>
+                                        </Form>
+                                    </div>
+                                </>}</>)}
                     </Col>
                 </Row>
             </Container>

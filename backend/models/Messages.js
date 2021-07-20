@@ -2,27 +2,31 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 let messageSchema = new Schema({
 
-    userFrom: [{
+    userFrom: {
         users: { type: String },
-        messages: [
-            {
-                message: { type: String },
-                user: { type: String }
-            },
-            { timestamp: true }
+        messages: [{
+            type: new mongoose.Schema(
+                {
+                    message: { type: String },
+                    user: { type: String },
+                },
+                { timestamps: true })
+        }
         ]
-    }]
+    }
     ,
-    userTo: [{
+    userTo: {
         users: { type: String },
-        messages: [
-            {
-                message: String,
-                user: String
-            },
-            { timestamp: true }
+        messages: [{
+            type: new mongoose.Schema(
+                {
+                    message: { type: String },
+                    user: { type: String },
+                },
+                { timestamps: true })
+        }
         ]
-    }]
+    }
 }, {
     timestamps: true,
     collection: "messages"
