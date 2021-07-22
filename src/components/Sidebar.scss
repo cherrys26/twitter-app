@@ -109,3 +109,34 @@ h5 {
     background-color: black !important;
     border: 1px solid rgba(128, 128, 128, 0.53) !important;
 }
+
+.message-flow {
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.dropdown-toggle::after {
+    display: none !important;
+}
+
+#messageNavBar {
+    justify-content: space-between;
+}
+
+#messInfoBtn {
+    color: deeppink;
+    font-size: x-large;
+}
+
+.dropdown-menu.show {
+    border: 1px solid rgba(128, 128, 128, 0.53) !important;
+    margin-left: -100px !important;
+}
+
+.dropdown-menu {
+    padding: 0.25rem 0 !important;
+}
+
+.nav-link {
+    padding: 0 15px 0 0;
+}

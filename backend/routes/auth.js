@@ -7,7 +7,7 @@ const { signup, signin, allUsers, getUser, getSearch, updateFollowers, getFollow
     updateUser,
 } = require('../controllers/auth');
 const { postTweet, getTweet, getTweetById, getAllTweets, getReply, postReply } = require('../controllers/tweets')
-const { getAllMessages, getMessages, updateMessages, userFromPost, userToPost, getMessageByUser } = require('../controllers/messages')
+const { getAllMessages, getMessages, updateMessages, userFromPost, userToPost, getMessageByUser, deleteMessage } = require('../controllers/messages')
 // Login and signup
 router.post('/signup', signup);
 router.post('/signin', signin);
@@ -44,6 +44,7 @@ router.get("/messages/:id", getMessages);
 router.get("/message/:user", getMessageByUser);
 router.post("/message/from/:id", userFromPost);
 router.post("/message/to/:id", userToPost);
+router.delete("/message/:id", deleteMessage);
 
 
 module.exports = router;

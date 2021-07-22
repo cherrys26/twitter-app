@@ -238,7 +238,7 @@ export default function Sidebar(props) {
                                                 <Popover className="popover-main" >
                                                     {user && user.map(user => {
                                                         return (
-                                                            <div className="popover-custom-header">
+                                                            <div key={user.username} className="popover-custom-header">
                                                                 <Container>
                                                                     <Row>
                                                                         <Col xs={4}>
@@ -266,9 +266,9 @@ export default function Sidebar(props) {
                                                 </Popover >)}
                                         >
                                             <Button className="infoBtn" style={{ backgroundColor: "transparent", border: "transparent" }}>
-                                                {user && user.map(user => {
+                                                {user && user.map((user, idx) => {
                                                     return (
-                                                        <div>
+                                                        <div key={idx}>
                                                             <Container>
                                                                 <Row>
                                                                     <Col xs={4}>

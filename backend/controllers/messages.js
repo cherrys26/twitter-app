@@ -9,11 +9,9 @@ exports.getAllMessages = (req, res) => {
 exports.updateMessages = (req, res, next) => {
     let { userFrom, userTo } = req.body;
     let errors = [];
-    Messages.find({ $and: [{ userFrom: userFrom, userTo: userTo }] })
+    Messages.find({ userTo: userTo })
         .then(users1 => {
             if (users1) {
-                return res.status(422).json({ errors: [{ users1: "Message already exists" }] });
-            } else {
                 const users1 = new Messages({
                     userFrom: {
                         users: userFrom
@@ -55,18 +53,6 @@ exports.getMessageByUser = (req, res) => {
         .catch(error => res.json(error))
 }
 
-exports.postMessage = (req, res) => {
-    let users = req.params.users
-    let { user, message } = req.body
-    Messages.updateOne(
-        { users: users },
-        { $push: { messages: { message: message } } },
-        { $push: { messages: { user: user } } }
-    )
-        .then(message => res.json(message))
-        .catch(error => res.json(error))
-}
-
 exports.userFromPost = (req, res) => {
     let _id = req.params.id
     let { users, message } = req.body
@@ -87,5 +73,14 @@ exports.userToPost = (req, res) => {
 
     )
         .then(user => res.json(user))
+        .catch(error => res.json(error))
+}
+
+exports.deleteMessage = (req, res) => {
+    let _id = req.params.id
+    Messages.findByIdAndDelete(
+        { _id: _id },
+    )
+        .then(follower => res.json(follower))
         .catch(error => res.json(error))
 }
