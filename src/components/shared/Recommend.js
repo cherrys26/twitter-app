@@ -24,10 +24,12 @@ export default function Recommend() {
     }, [isLoading])
 
     useEffect(() => {
-        setTimeout(() => setisLoading(false), 4500);
-    });
-
-
+        if (randomUser1 && randomUser2 && randomUser3) {
+            setTimeout(() => setisLoading(false), 1000)
+        } else {
+            setTimeout(() => setisLoading(true))
+        }
+    })
     if (user) {
         var randomUser1 = user[Math.floor(Math.random() * user.length)];
         var randomUser2 = user[Math.floor(Math.random() * user.length)];

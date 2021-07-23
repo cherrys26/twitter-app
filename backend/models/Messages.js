@@ -3,12 +3,12 @@ const Schema = mongoose.Schema;
 let messageSchema = new Schema({
 
     userFrom: {
-        users: { type: String },
+        users: { type: String, required: true },
         messages: [{
             type: new mongoose.Schema(
                 {
-                    message: { type: String },
-                    user: { type: String },
+                    message: { type: String, required: true },
+                    user: { type: String, required: true },
                 },
                 { timestamps: true })
         }
@@ -16,12 +16,12 @@ let messageSchema = new Schema({
     }
     ,
     userTo: {
-        users: { type: String },
+        users: { type: String, required: true },
         messages: [{
             type: new mongoose.Schema(
                 {
-                    message: { type: String },
-                    user: { type: String },
+                    message: { type: String, required: true },
+                    user: { type: String, required: true },
                 },
                 { timestamps: true })
         }

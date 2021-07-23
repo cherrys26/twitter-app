@@ -24,6 +24,8 @@ import Loader from './Loading';
 
 export default function Tweets() {
 
+    const [userTest, setUserTest] = useState();
+
     const [user, setUser] = useState();
     const [tweets, setTweets] = useState([]);
     const [tweet1, setTweet1] = useState([]);
@@ -39,9 +41,6 @@ export default function Tweets() {
     const userProfile = axios.get(`${BASE_API_URL}user/${getUser}`);
     const userTweets = axios.get(`${BASE_API_URL}tweets/${getUser}`);
 
-    useEffect(() => {
-        setTimeout(() => setisLoading(false), 3000);
-    });
 
     useEffect(() => {
         userProfile.then(data => setUser(data.data)) // eslint-disable-next-line
@@ -51,12 +50,23 @@ export default function Tweets() {
     }, [])
 
     useEffect(() => {
-        if (user) {
-
+        if (user && tweets) {
             axios.get(`${BASE_API_URL}tweets/${user[0].following[0]}`)
                 .then(followData => setTweet1(followData.data))
         }
-    }, [tweets, setTweet1])
+    }, [tweets])
+
+    useEffect(() => {
+        if (user && tweet1) {
+            axios.get(`${BASE_API_URL}user/${user[0].following[0]}`)
+                .then(followData => setUserTest(followData.data))
+        }
+    }, [tweet1])
+    if (!tweet1) {
+        console.log("not loaded yet")
+    } else {
+        console.log(tweet1)
+    }
 
     useEffect(() => {
         if (user) {
@@ -64,40 +74,57 @@ export default function Tweets() {
             axios.get(`${BASE_API_URL}tweets/${user[0].following[1]}`)
                 .then(followData => setTweet2(followData.data))
         }
-    }, [tweets, setTweet2])
+    }, [tweets])
 
     useEffect(() => {
         if (user) {
             axios.get(`${BASE_API_URL}tweets/${user[0].following[2]}`)
                 .then(followData => setTweet3(followData.data))
         }
-    }, [tweets, setTweet3])
+    }, [tweets])
 
     useEffect(() => {
         if (user) {
             axios.get(`${BASE_API_URL}tweets/${user[0].following[3]}`)
                 .then(followData => setTweet4(followData.data))
         }
-    }, [tweets, setTweet4])
+    }, [tweets])
 
     useEffect(() => {
         if (user) {
             axios.get(`${BASE_API_URL}tweets/${user[0].following[4]}`)
                 .then(followData => setTweet5(followData.data))
         }
-    }, [tweets, setTweet5])
+    }, [tweets])
 
     useEffect(() => {
         if (user) {
             axios.get(`${BASE_API_URL}tweets/${user[0].following[5]}`)
                 .then(followData => setTweet6(followData.data))
         }
-    }, [tweets, setTweet6])
+    }, [tweets])
 
     let allTweet = tweets.concat(tweet1, tweet2, tweet3, tweet4, tweet5, tweet6)
 
+    if (!user) {
+        console.log('wait')
+    } else if (user[0].following.length === 0) {
+        console.log('no followers')
+    } else {
+        console.log(user[0].following)
+    }
     const tweetSort = allTweet.sort((a, b) => {
         return moment(a.createdAt).diff(b.createdAt)
+    })
+
+    // console.log(allTweet.map(user => user.username))
+
+    useEffect(() => {
+        if (!tweet1) {
+            setTimeout(() => setisLoading(true))
+        } else {
+            setTimeout(() => setisLoading(false), 2000)
+        }
     })
 
     const likeTip = (props) => (

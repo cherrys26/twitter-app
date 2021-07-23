@@ -51,7 +51,12 @@ function MyVerticallyCenteredModal(props) {
                 }
             }
             )
-            history.push("/messages");
+            if(event){
+               history.push('/messages')
+            }
+            if(history){
+                window.location.reload();
+            }
         } catch (error) {
             if (error.response) {
 
@@ -160,10 +165,14 @@ export default function Messages() {
         };
     };
 
+     useEffect(() => {
+        if(path[2] === undefined) {
+            setTimeout(() => setisLoading(true))
+        } else {
+            setTimeout(() => setisLoading(false), 2000)
+        }
 
-    useEffect(() => {
-        setTimeout(() => setisLoading(false), 3000);
-    });
+    })
 
     useEffect(() => {
         getMessageByUser.then(data => setMessageByUser(data.data))
