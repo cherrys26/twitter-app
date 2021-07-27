@@ -34,6 +34,7 @@ export default function TweetBox(props) {
             }
         };
         event.target.reset()
+        console.log(tweet)
     };
 
 
@@ -55,8 +56,8 @@ export default function TweetBox(props) {
                                     value={tweet}
                                     onChange={(e) => setTweet(e.target.value)}
                                     style={{ backgroundColor: "black", height: "80px", border: "0px", color: "white" }} />
+                                <Button className="tweet-button" type="submit">Tweet </Button>
                             </Form.Group>
-                            <Button className="tweet-button" type="submit">Tweet </Button>
                         </Form>
                     </Card.Body>
                 </Col>

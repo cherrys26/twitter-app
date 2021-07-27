@@ -41,19 +41,13 @@ export default function Profile(props) {
     const [user, setUser] = useState();
     const [tweets, setTweets] = useState([]);
     const [followingUser, setFollowingUser] = useState([]);
-    const [followerUser, setFollowerUser] = useState([]);
     const [isLoading, setisLoading] = useState(true);
-    const [show, setShow] = useState(false);
     const location = useLocation();
 
     let getUser = JSON.parse(localStorage.getItem("username"))
     let path = location.pathname.split("/")
     let history = useHistory();
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
-
     const userFollowing = axios.get(`${BASE_API_URL}following/${getUser}`);
-    const userFollowers = axios.get(`${BASE_API_URL}followers/${path[1]}`);
     const userProfile = axios.get(`${BASE_API_URL}user/${path[1]}`);
     const userTweets = axios.get(`${BASE_API_URL}tweets/${path[1]}`);
 
@@ -149,9 +143,6 @@ export default function Profile(props) {
         userFollowing.then(followingData => setFollowingUser(followingData.data)) // eslint-disable-next-line
     }, [])
     useEffect(() => {
-        userFollowers.then(followerData => setFollowerUser(followerData.data)) // eslint-disable-next-line
-    }, [])
-    useEffect(() => {
         userProfile.then(data => setUser(data.data)).catch((error) => { console.log(error) }) // eslint-disable-next-line
     }, [])
     useEffect(() => {
@@ -236,9 +227,9 @@ export default function Profile(props) {
         <Container>
             {user && user.map(user => {
                 return (
-                    <>
+                    <div key={user._id} >
                         {(user.username === path[1]) ? (
-                            < Row key={user._id} >
+                            < Row >
                                 <Col lg={7}>
                                     <Container>
                                         <Col md={12} className="topBar">
@@ -402,7 +393,7 @@ export default function Profile(props) {
 
                             </Row>)
                             : (<div>no</div>)}
-                    </>
+                    </div>
                 )
             })}
         </Container >
@@ -412,7 +403,6 @@ export default function Profile(props) {
 function Likes() {
 
     const [likes, setLikes] = useState([]);
-    const [tweet, setTweet] = useState('')
 
     const location = useLocation();
     let path = location.pathname.split("/")

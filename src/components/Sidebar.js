@@ -30,6 +30,10 @@ import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import { AiOutlineHome, AiOutlineBell, AiOutlineUser, AiOutlineClose } from "react-icons/ai";
 import { GiFeather } from "react-icons/gi";
 import { BiSearchAlt, BiSend } from "react-icons/bi";
+
+import Loader from './shared/Loading';
+
+
 import "./Sidebar.scss"
 
 
@@ -161,88 +165,131 @@ function TweetModal(props) {
 
 
 export default function Sidebar(props) {
-    const [user, setUser] = useState();
 
+    const [user, setUser] = useState();
     const [tweetShow, setTweetShow] = useState(false);
+
+    const [isLoading, setisLoading] = useState(true);
+
     let getUser = JSON.parse(localStorage.getItem("username"))
 
     const userProfile = axios.get(`${BASE_API_URL}user/${getUser}`);
 
     useEffect(() => {
         userProfile.then(data => setUser(data.data)) // eslint-disable-next-line
-    }, [])
+    }, [getUser])
 
-
+    useEffect(() => {
+        if (!user === true) {
+            setTimeout(() => setisLoading(true));
+        } else if (user && user.length === 0) {
+            setTimeout(() => setisLoading(true))
+        } else {
+            setTimeout(() => setisLoading(false), 750)
+        }
+    })
 
     return (
         <Router>
-            <Container style={{ display: "flex", marginRight: 0, marginLeft: 0, maxWidth: "inherit" }}>
+            {isLoading ? <Loader /> :
 
-                <Col lg={3} sm={1} xs={2}
-                    style={{
-                        padding: "10px",
-                    }}
-                >
-                    <Container spacing={4}>
-                        <ul className="items">
-                            <Col>
-                                <li>
-                                    <Link to="/home" style={{ textDecoration: 'none' }}><h5><AiOutlineHome className="icon" /> <span className="hide">Home</span></h5></Link>
-                                </li>
-                            </Col>
-                            <br />
-                            <Col>
-                                <li>
-                                    <Link to="/explore" style={{ textDecoration: 'none' }} ><h5><BiSearchAlt className="icon" /> <span className="hide">Explore</span></h5></Link>
-                                </li>
-                            </Col>
-                            <br />
-                            <Col>
-                                <li>
-                                    <Link to="/notifications" style={{ textDecoration: 'none' }}><h5><AiOutlineBell className="icon" /> <span className="hide">Notifications</span></h5></Link>
-                                </li>
-                            </Col>
-                            <br />
-                            <Col>
-                                <li>
-                                    <Link to="/messages" style={{ textDecoration: 'none' }}><h5><BiSend className="icon" /> <span className="hide">Messages</span></h5></Link>
-                                </li>
-                            </Col>
-                            <br />
-                            <Col>
-                                <li>
-                                    <Link to={`/${GetUser()}`} style={{ textDecoration: 'none' }}><h5><AiOutlineUser className="icon" /> <span className="hide">Profile</span></h5></Link>
-                                </li>
-                            </Col>
-                            <br />
-                            <Col>
-                                <li>
-                                    <Button className="list-button" type="button" onClick={() => setTweetShow(true)}>Tweet </Button>
-                                    <Button className="list-ava" type="button" onClick={() => setTweetShow(true)}><GiFeather style={{ fontSize: "x-large" }} /> </Button>
-                                    <TweetModal
-                                        show={tweetShow}
-                                        onHide={() => setTweetShow(false)}
-                                        onSubmit={() => setTweetShow(false)}
-                                    />
-                                </li>
-                            </Col>
-                            <br />
-                            <Row className="align-items-end">
+                <Container style={{ display: "flex", marginRight: 0, marginLeft: 0, maxWidth: "inherit" }}>
+
+                    <Col lg={3} sm={1} xs={2}
+                        style={{
+                            padding: "10px",
+                        }}
+                    >
+                        <Container spacing={4}>
+                            <ul className="items">
                                 <Col>
                                     <li>
-                                        <OverlayTrigger
-                                            placement="top"
-                                            trigger="click"
-                                            rootClose={true}
-                                            overlay={(
-                                                <Popover className="popover-main" >
-                                                    {user && user.map(user => {
+                                        <Link to="/home" style={{ textDecoration: 'none' }}><h5><AiOutlineHome className="icon" /> <span className="hide">Home</span></h5></Link>
+                                    </li>
+                                </Col>
+                                <br />
+                                <Col>
+                                    <li>
+                                        <Link to="/explore" style={{ textDecoration: 'none' }} ><h5><BiSearchAlt className="icon" /> <span className="hide">Explore</span></h5></Link>
+                                    </li>
+                                </Col>
+                                <br />
+                                <Col>
+                                    <li>
+                                        <Link to="/notifications" style={{ textDecoration: 'none' }}><h5><AiOutlineBell className="icon" /> <span className="hide">Notifications</span></h5></Link>
+                                    </li>
+                                </Col>
+                                <br />
+                                <Col>
+                                    <li>
+                                        <Link to="/messages" style={{ textDecoration: 'none' }}><h5><BiSend className="icon" /> <span className="hide">Messages</span></h5></Link>
+                                    </li>
+                                </Col>
+                                <br />
+                                <Col>
+                                    <li>
+                                        <Link to={`/${GetUser()}`} style={{ textDecoration: 'none' }}><h5><AiOutlineUser className="icon" /> <span className="hide">Profile</span></h5></Link>
+                                    </li>
+                                </Col>
+                                <br />
+                                <Col>
+                                    <li>
+                                        <Button className="list-button" type="button" onClick={() => setTweetShow(true)}>Tweet </Button>
+                                        <Button className="list-ava" type="button" onClick={() => setTweetShow(true)}><GiFeather style={{ fontSize: "x-large" }} /> </Button>
+                                        <TweetModal
+                                            show={tweetShow}
+                                            onHide={() => setTweetShow(false)}
+                                            onSubmit={() => setTweetShow(false)}
+                                        />
+                                    </li>
+                                </Col>
+                                <br />
+                                <Row className="align-items-end">
+                                    <Col>
+                                        <li>
+                                            <OverlayTrigger
+                                                placement="top"
+                                                trigger="click"
+                                                rootClose={true}
+                                                overlay={(
+                                                    <Popover className="popover-main" >
+                                                        {user && user.map(user => {
+                                                            return (
+                                                                <div key={user.username} className="popover-custom-header">
+                                                                    <Container>
+                                                                        <Row>
+                                                                            <Col xs={4}>
+                                                                                <Image src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg" style={{ width: "40px", height: "40px" }} roundedCircle />
+                                                                            </Col>
+                                                                            <Col xs={8}>
+                                                                                <Container>
+                                                                                    <Col xs={12}>
+                                                                                        {user.name}
+                                                                                    </Col>
+                                                                                    <Col xs={12}>
+                                                                                        @{user.username}
+                                                                                    </Col>
+                                                                                </Container>
+                                                                            </Col>
+                                                                        </Row>
+                                                                    </Container>
+                                                                    <Button onClick={() => props.history.push('/') & localStorage.removeItem("username") & console.log("logout :(")}>
+                                                                        Logout @{user.username}
+                                                                    </Button>
+                                                                </div>
+                                                            )
+                                                        })}
+
+                                                    </Popover >)}
+                                            >
+                                                <Button className="infoBtn" style={{ backgroundColor: "transparent", border: "transparent" }}>
+                                                    {user && user.map((user, idx) => {
                                                         return (
-                                                            <div key={user.username} className="popover-custom-header">
+                                                            <div key={idx}>
                                                                 <Container>
                                                                     <Row>
                                                                         <Col xs={4}>
-                                                                            <Image src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg" style={{ width: "40px", height: "40px" }} roundedCircle />
+                                                                            <Image src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg" style={{ width: "50px", height: "50px" }} roundedCircle />
                                                                         </Col>
                                                                         <Col xs={8}>
                                                                             <Container>
@@ -256,62 +303,33 @@ export default function Sidebar(props) {
                                                                         </Col>
                                                                     </Row>
                                                                 </Container>
-                                                                <Button onClick={() => props.history.push('/') & localStorage.removeItem("username") & console.log("logout :(")}>
-                                                                    Logout @{user.username}
-                                                                </Button>
                                                             </div>
                                                         )
                                                     })}
-
-                                                </Popover >)}
-                                        >
-                                            <Button className="infoBtn" style={{ backgroundColor: "transparent", border: "transparent" }}>
-                                                {user && user.map((user, idx) => {
-                                                    return (
-                                                        <div key={idx}>
-                                                            <Container>
-                                                                <Row>
-                                                                    <Col xs={4}>
-                                                                        <Image src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg" style={{ width: "50px", height: "50px" }} roundedCircle />
-                                                                    </Col>
-                                                                    <Col xs={8}>
-                                                                        <Container>
-                                                                            <Col xs={12}>
-                                                                                {user.name}
-                                                                            </Col>
-                                                                            <Col xs={12}>
-                                                                                @{user.username}
-                                                                            </Col>
-                                                                        </Container>
-                                                                    </Col>
-                                                                </Row>
-                                                            </Container>
-                                                        </div>
-                                                    )
-                                                })}
-                                            </Button>
-                                        </OverlayTrigger>
-                                    </li>
-                                </Col>
-                            </Row>
-                        </ul>
-                    </Container>
-                </Col>
+                                                </Button>
+                                            </OverlayTrigger>
+                                        </li>
+                                    </Col>
+                                </Row>
+                            </ul>
+                        </Container>
+                    </Col>
 
 
-                <Col lg={9} sm={11} xs={10} style={{ flex: 1, padding: "0 10px" }}>
-                    <Switch>
-                        {routes.map((route, index) => (
-                            <Route
-                                key={index}
-                                path={route.path}
-                                exact={route.exact}
-                                children={<route.main />}
-                            />
-                        ))}
-                    </Switch>
-                </Col>
-            </Container>
+                    <Col lg={9} sm={11} xs={10} style={{ flex: 1, padding: "0 10px" }}>
+                        <Switch>
+                            {routes.map((route, index) => (
+                                <Route
+                                    key={index}
+                                    path={route.path}
+                                    exact={route.exact}
+                                    children={<route.main />}
+                                />
+                            ))}
+                        </Switch>
+                    </Col>
+                </Container>
+            }
         </Router >
     );
 }

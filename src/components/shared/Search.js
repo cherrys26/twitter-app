@@ -51,7 +51,6 @@ export default function SearchSwitter() {
                     </Link>
                 )}
             />
-            <button type="submit">search?</button>
         </Form>
     );
 };

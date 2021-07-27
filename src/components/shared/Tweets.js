@@ -1,6 +1,5 @@
 import React, { useState, useEffect, } from 'react';
 import {
-    useLocation,
     Link,
 } from 'react-router-dom'
 import { BASE_API_URL } from '../../utils/constants';
@@ -17,25 +16,37 @@ import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import moment from 'moment';
 import { motion } from 'framer-motion'
 
-import { AiOutlineRetweet, AiOutlineHeart, AiOutlineMessage } from "react-icons/ai";
+import { AiOutlineHeart, AiOutlineMessage } from "react-icons/ai";
 
 import Retweet from './Re';
 import Loader from './Loading';
 
 export default function Tweets() {
 
-    const [userTest, setUserTest] = useState();
-
-    const [user, setUser] = useState();
     const [tweets, setTweets] = useState([]);
+    const [user, setUser] = useState();
     const [tweet1, setTweet1] = useState([]);
+    const [user1, setUser1] = useState();
     const [tweet2, setTweet2] = useState([]);
+    const [user2, setUser2] = useState();
     const [tweet3, setTweet3] = useState([]);
+    const [user3, setUser3] = useState();
     const [tweet4, setTweet4] = useState([]);
+    const [user4, setUser4] = useState();
     const [tweet5, setTweet5] = useState([]);
+    const [user5, setUser5] = useState();
     const [tweet6, setTweet6] = useState([]);
+    const [user6, setUser6] = useState();
+
+    const [userTweet, setUserTweet] = useState([]);
+    const [userTweet1, setUserTweet1] = useState([]);
+    const [userTweet2, setUserTweet2] = useState([]);
+    const [userTweet3, setUserTweet3] = useState([]);
+    const [userTweet4, setUserTweet4] = useState([]);
+    const [userTweet5, setUserTweet5] = useState([]);
+    const [userTweet6, setUserTweet6] = useState([]);
+
     const [isLoading, setisLoading] = useState(true);
-    const location = useLocation();
 
     let getUser = JSON.parse(localStorage.getItem("username"))
     const userProfile = axios.get(`${BASE_API_URL}user/${getUser}`);
@@ -43,87 +54,104 @@ export default function Tweets() {
 
 
     useEffect(() => {
-        userProfile.then(data => setUser(data.data)) // eslint-disable-next-line
-    }, [])
-    useEffect(() => {
-        userTweets.then(tweetData => setTweets(tweetData.data))// eslint-disable-next-line
+        const interval = setInterval(() => {
+            userTweets.then(tweetData => setTweets(tweetData.data))
+        }, 2500);
+        return () => clearInterval(interval) // eslint-disable-next-line
     }, [])
 
     useEffect(() => {
+        userProfile.then(data => setUser(data.data)) // eslint-disable-next-line
+    }, [])
+
+    useEffect(() => {
+
+        if (user && tweets) {
+            setUserTweet(tweets.map((item) => Object.assign({}, item, user)))
+        }
+
         if (user && tweets) {
             axios.get(`${BASE_API_URL}tweets/${user[0].following[0]}`)
                 .then(followData => setTweet1(followData.data))
         }
-    }, [tweets])
-
-    useEffect(() => {
-        if (user && tweet1) {
+        if (user && tweets) {
             axios.get(`${BASE_API_URL}user/${user[0].following[0]}`)
-                .then(followData => setUserTest(followData.data))
+                .then(followData => setUser1(followData.data))
         }
-    }, [tweet1])
-    if (!tweet1) {
-        console.log("not loaded yet")
-    } else {
-        console.log(tweet1)
-    }
 
-    useEffect(() => {
         if (user) {
-
             axios.get(`${BASE_API_URL}tweets/${user[0].following[1]}`)
                 .then(followData => setTweet2(followData.data))
         }
-    }, [tweets])
+        if (user && tweets) {
+            axios.get(`${BASE_API_URL}user/${user[0].following[1]}`)
+                .then(followData => setUser2(followData.data))
+        }
 
-    useEffect(() => {
         if (user) {
             axios.get(`${BASE_API_URL}tweets/${user[0].following[2]}`)
                 .then(followData => setTweet3(followData.data))
         }
-    }, [tweets])
+        if (user && tweets) {
+            axios.get(`${BASE_API_URL}user/${user[0].following[2]}`)
+                .then(followData => setUser3(followData.data))
+        }
 
-    useEffect(() => {
+
         if (user) {
             axios.get(`${BASE_API_URL}tweets/${user[0].following[3]}`)
                 .then(followData => setTweet4(followData.data))
         }
-    }, [tweets])
+        if (user && tweets) {
+            axios.get(`${BASE_API_URL}user/${user[0].following[3]}`)
+                .then(followData => setUser4(followData.data))
+        }
 
-    useEffect(() => {
         if (user) {
             axios.get(`${BASE_API_URL}tweets/${user[0].following[4]}`)
                 .then(followData => setTweet5(followData.data))
         }
-    }, [tweets])
+        if (user && tweets) {
+            axios.get(`${BASE_API_URL}user/${user[0].following[4]}`)
+                .then(followData => setUser5(followData.data))
+        }
 
-    useEffect(() => {
+
         if (user) {
             axios.get(`${BASE_API_URL}tweets/${user[0].following[5]}`)
                 .then(followData => setTweet6(followData.data))
+        } if (user && tweets) {
+            axios.get(`${BASE_API_URL}user/${user[0].following[5]}`)
+                .then(followData => setUser6(followData.data))
         }
+
+
     }, [tweets])
 
-    let allTweet = tweets.concat(tweet1, tweet2, tweet3, tweet4, tweet5, tweet6)
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setUserTweet1(tweet1.map((item1) => Object.assign(item1, user1)))
+            setUserTweet2(tweet2.map((item2) => Object.assign(item2, user2)))
+            setUserTweet3(tweet3.map((item3) => Object.assign(item3, user3)))
+            setUserTweet4(tweet4.map((item4) => Object.assign(item4, user4)))
+            setUserTweet5(tweet5.map((item5) => Object.assign(item5, user5)))
+            setUserTweet6(tweet6.map((item6) => Object.assign(item6, user6)))
+        }, 5000);
+        return () => clearInterval(interval)
+    })
 
-    if (!user) {
-        console.log('wait')
-    } else if (user[0].following.length === 0) {
-        console.log('no followers')
-    } else {
-        console.log(user[0].following)
-    }
-    const tweetSort = allTweet.sort((a, b) => {
+    let allTweet = userTweet.concat(userTweet1, userTweet2, userTweet3, userTweet4, userTweet5, userTweet6)
+
+    const allTweetSort = allTweet.sort((a, b) => {
         return moment(a.createdAt).diff(b.createdAt)
     })
 
-    // console.log(allTweet.map(user => user.username))
-
     useEffect(() => {
-        if (!tweet1) {
+        if (userTweet1[0] === undefined) {
             setTimeout(() => setisLoading(true))
-        } else {
-            setTimeout(() => setisLoading(false), 2000)
+        }
+        else {
+            setTimeout(() => setisLoading(false), 100)
         }
     })
 
@@ -137,37 +165,11 @@ export default function Tweets() {
         return tweets.findIndex(obj => obj._id === _id);
     }
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        try {
-            const updatedData = {
-                username: getUser,
-            }
-            await axios.post(`${BASE_API_URL}tweets/${getIndex()}`, {
-                ...updatedData
-            })
-        } catch (error) {
-            if (error.response) {
-
-                console.log('error', error.response.data);
-            }
-        };
-        event.target.reset()
-    };
-
     const replyTip = (props) => (
         <Tooltip id="button-tooltip" {...props}>
             Reply
         </Tooltip>
     );
-
-    const [show, setShow] = useState(false)
-    const showReply = () => setShow(true)
-    const hideReply = () => setShow(false)
-
-    // function ReplyTweet(_id) {
-
-    const [tweet, setTweet] = useState({});
 
     let handleOpenTweet = async ({ id }) => {
         try {
@@ -179,17 +181,6 @@ export default function Tweets() {
             }
         }
     }
-
-    //     return (
-    //         <div>
-    //             {tweet && tweet.map((tweet) => {
-    //                 <div>
-    //                     {tweet.tweet}
-    //                 </div>
-    //             })}
-    //         </div>
-    //     )
-    // }
 
     return (
         <>
@@ -213,14 +204,12 @@ export default function Tweets() {
                                                             < button className="homeButton" >
                                                                 <Row>
                                                                     <Col xs={{ span: 11 }} style={{ padding: "0px", textAlign: "left" }}>
-                                                                        {user && user.map(user => {
-                                                                            return (
-                                                                                <span key={user._id}>
-                                                                                    <Link to={`${user.username}`}
-                                                                                        style={{ color: "white", textDecoration: "none", fontSize: "16px" }}>
-                                                                                        <b>{user.name}</b>
-                                                                                    </Link></span>)
-                                                                        })}
+
+                                                                        <span >
+                                                                            <Link to={`${tweets.username}`}
+                                                                                style={{ color: "white", textDecoration: "none", fontSize: "16px" }}>
+                                                                                <b>{tweets[0].name}</b>
+                                                                            </Link></span>
                                                                         <span style={{ color: "grey", fontSize: "15x", paddingLeft: "6px" }}>
                                                                             @{tweets.username}
                                                                             <span style={{ padding: "0 4px" }}>&#183;</span>
@@ -255,21 +244,7 @@ export default function Tweets() {
                                                                 </button>
 
                                                             </OverlayTrigger >
-                                                            {/* <Modal show={show} onHide={hideReply}>
-                                                                <Modal.Body>
-                                                                    <Form>
-                                                                        <Form.Control as="textarea" rows={3} />
-                                                                    </Form>
-                                                                </Modal.Body>
-                                                                <Modal.Footer>
-                                                                    <Button variant="secondary" onClick={hideReply}>
-                                                                        Cancel
-                                                                    </Button>
-                                                                    <Button variant="primary" onClick={hideReply}>
-                                                                        Reply
-                                                                    </Button>
-                                                                </Modal.Footer>
-                                                            </Modal> */}
+
                                                         </Col>
                                                         <Col sm={3}>
                                                             <Retweet />
@@ -288,7 +263,7 @@ export default function Tweets() {
 
                                                             </OverlayTrigger >
 
-                                                            {/* <Like /> */}
+
                                                         </Col>
                                                     </Row>
                                                 </Container>

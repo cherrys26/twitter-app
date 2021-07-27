@@ -21,7 +21,7 @@ export default function Recommend() {
 
     useEffect(() => {
         userProfile.then(data => setUser(data.data))
-    }, [isLoading])
+    }, [isLoading]) //eslint-disable-line
 
     useEffect(() => {
         if (randomUser1 && randomUser2 && randomUser3) {
@@ -45,9 +45,8 @@ export default function Recommend() {
                     <Card.Body style={{ padding: 0 }}>
                         <Card.Title style={{ fontSize: "larger", backgroundColor: "inherit", borderBottom: "1px solid #80808087", color: "white", margin: "0", padding: "10px" }}>Follow Suggested Users</Card.Title>
                         <Card.Text style={{ backgroundColor: "inherit", borderBottom: "1px solid #80808087", margin: "0", padding: "10px" }}>
-                            <Container>
+                            <Container key={randomUser1.email}>
                                 <Link style={{ textDecoration: 'none' }} to={`/${randomUser1.username}`} >
-
                                     <Row>
                                         <Col xs={3}>
                                             <Image src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg" style={{ width: "50px", height: "50px" }} roundedCircle />
@@ -67,7 +66,7 @@ export default function Recommend() {
                             </Container>
                         </Card.Text>
                         <Card.Text style={{ backgroundColor: "inherit", borderBottom: "1px solid #80808087", margin: "0", padding: "10px" }} >
-                            <Container>
+                            <Container key={randomUser2.email}>
                                 <Link to={`/${randomUser2.username}`} style={{ textDecoration: 'none' }} >
 
                                     <Row>
@@ -89,7 +88,7 @@ export default function Recommend() {
                             </Container>
                         </Card.Text>
                         <Card.Text style={{ backgroundColor: "inherit", borderBottom: "1px solid #80808087", marginTop: "0", padding: "10px" }}>
-                            <Container>
+                            <Container key={randomUser3.email}>
                                 <Link style={{ textDecoration: 'none' }} to={`/${randomUser3.username}`} >
                                     <Row>
                                         <Col xs={3}>

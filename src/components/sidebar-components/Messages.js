@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 
-import Header from './Toolbar';
-
 import { BASE_API_URL } from '../../utils/constants';
 import axios from 'axios';
 
@@ -51,10 +49,10 @@ function MyVerticallyCenteredModal(props) {
                 }
             }
             )
-            if(event){
-               history.push('/messages')
+            if (event) {
+                history.push('/messages')
             }
-            if(history){
+            if (history) {
                 window.location.reload();
             }
         } catch (error) {
@@ -98,13 +96,8 @@ export default function Messages() {
     const [open, setOpen] = useState(false)
     const [openDelete, setOpenDelete] = useState(false)
     const [following, setGetFollowing] = useState([]);
-    const [getId, setGetId] = useState('');
-    const [mess, setMess] = useState('');
     const [messageByUser, setMessageByUser] = useState([]);
     const [messageById, setMessageById] = useState('');
-
-    const [userFromPost, setUserFromPost] = useState('');
-    const [userToPost, setUserToPost] = useState('');
 
     const [messageFrom, setMessageFrom] = useState('')
     const [messageTo, setMessageTo] = useState('')
@@ -115,8 +108,6 @@ export default function Messages() {
 
     const handleOpen = () => setOpen(true)
     const handleClose = () => setOpen(false)
-    const handleOpenDelete = () => setOpenDelete(true)
-    const handleCloseDelete = () => setOpenDelete(false)
 
     let getUser = JSON.parse(localStorage.getItem("username"))
     let path = location.pathname.split("/")
@@ -165,8 +156,8 @@ export default function Messages() {
         };
     };
 
-     useEffect(() => {
-        if(path[2] === undefined) {
+    useEffect(() => {
+        if (path[2] === undefined) {
             setTimeout(() => setisLoading(true))
         } else {
             setTimeout(() => setisLoading(false), 2000)
